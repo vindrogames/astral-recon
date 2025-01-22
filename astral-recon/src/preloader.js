@@ -32,17 +32,18 @@ export class Preloader extends Phaser.Scene {
         this.load.atlas("world_1_wall_animation", "world_1/map/wall_animation.png", "world_1/map/wall_animation.json");
 
         // Buttons
-        this.load.image("world_1_easy_off", "world_1/map/easy_off.png");
-        this.load.image("world_1_easy_on", "world_1/map/easy_on.png");
-        this.load.image("world_1_hard_off", "world_1/map/hard_off.png");
-        this.load.image("world_1_hard_on", "world_1/map/hard_on.png");
+        this.load.image("world_1_easy_off", "world_1/buttons/easy_off.png");
+        this.load.image("world_1_easy_on", "world_1/buttons/easy_on.png");
+        this.load.image("world_1_hard_off", "world_1/buttons/hard_off.png");
+        this.load.image("world_1_hard_on", "world_1/buttons/hard_on.png");
 
         // Avatars assets
         this.load.atlas("world_1_mach_animation_all", "world_1/avatars/mach_animation_all.png", "world_1/avatars/mach_animation_all.json");
-        this.load.atlas("tupac_caged_animation", "tupac_caged_animation.png", "tupac_caged_animation.json");
+        this.load.atlas("tupac_caged_animation", "world_1/avatars/tupac_caged_animation.png", "world_1/avatars/tupac_caged_animation.json");
         this.load.atlas("tupac_reveal_animation", "world_1/avatars/tupac_reveal_animation.png", "world_1/avatars/tupac_reveal_animation.json");
 
         // End Dialogue
+        this.load.atlas("world_1_final_dialogue_animation", "world_1/end_dialogue/final_dialogue_animation.png", "world_1/end_dialogue/final_dialogue_animation.json")
 
         // World 2
         // Map assets
@@ -51,30 +52,20 @@ export class Preloader extends Phaser.Scene {
         this.load.tilemapCSV("world_2_room_2", "world_2/map/room_2.csv");
         this.load.tilemapCSV("world_2_room_3", "world_2/map/room_3.csv");
         this.load.atlas("world_2_final_key_animation", "world_2/map/final_key_animation.png", "world_2/map/final_key_animation.json");
-        this.load.atlas("world_2_wall_animation", "world_2/map/wall_animation.png", "world_2/map/wall_animation.json");
+        //this.load.atlas("world_2_wall_animation", "world_2/map/wall_animation.png", "world_2/map/wall_animation.json");
 
         // Buttons
-        this.load.image("world_2_easy_off", "world_2/map/easy_off.png");
-        this.load.image("world_2_easy_on", "world_2/map/easy_on.png");
-        this.load.image("world_2_hard_off", "world_2/map/hard_off.png");
-        this.load.image("world_2_hard_on", "world_2/map/hard_on.png");
+        this.load.image("world_2_easy_off", "world_2/buttons/easy_off.png");
+        this.load.image("world_2_easy_on", "world_2/buttons/easy_on.png");
+        this.load.image("world_2_hard_off", "world_2/buttons/hard_off.png");
+        this.load.image("world_2_hard_on", "world_2/buttons/hard_on.png");
 
         // Avatar Assets
     }
 
     create() {
-        // Create bitmap font and load it in cache
-        const config = {
-            image: 'knighthawks',
-            width: 31,
-            height: 25,
-            chars: Phaser.GameObjects.RetroFont.TEXT_SET6,
-            charsPerRow: 10,
-            spacing: { x: 1, y: 1 }
-        };
-        this.cache.bitmapFont.add('knighthawks', Phaser.GameObjects.RetroFont.Parse(this, config));
 
         // When all the assets are loaded go to the next scene
-        this.scene.start("SplashScene");
+        this.scene.start("StartScene");
     }
 }
