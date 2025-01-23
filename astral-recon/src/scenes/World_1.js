@@ -1,4 +1,6 @@
 import { Scene } from "phaser";
+import { KeyTile }  from "../gameobjects/KeyTile.js"
+
 
 // general specs. I want to import this from config.js
 const TILE_SIZE = 64;
@@ -31,21 +33,49 @@ export class World_1 extends Scene {
         super("World_1");
     }
 
-    init(difficulty) {
-
-        this.mode = difficulty.mode || 'hard';
+    init(params) {
 
         this.cameras.main.fadeIn(1000, 0, 0, 0);
-        //this.scene.launch("World_1");
+        this.mode = params.mode || 'hard';
+        this.room = params.room || 'world_1_room_1';
+        this.complete = params.complete || false;
+        this.key_tile_x = params.key_tile_x || TILEDIMENSION * 5 + TILEDIMENSION / 2;
+        this.key_tile_y = params.key_tile_y || TILEDIMENSION * 5 + TILEDIMENSION / 2;
     }
 
     create() {
 
-        var map = this.make.tilemap({ key: 'world_1_room_1', tileWidth: TILEDIMENSION, tileHeight: TILEDIMENSION });
+        var map = this.make.tilemap({ key: this.room, tileWidth: TILEDIMENSION, tileHeight: TILEDIMENSION });
         var tileset = map.addTilesetImage('world_1_tileset_64', null, TILEDIMENSION, TILEDIMENSION, 0, 0);       
         var layer = map.createLayer('layer', tileset, 0, 0);
 
-        
+        const levelBtn = this.add.text(56, 56, 'Next Level', {fontSize: '14px', color: 'black'})
+                            .setInteractive({ useHandCursor: true })
+                            .on('pointerdown', () => {
+                
+                                if (this.room === 'world_1_room_1') {
+
+                                    console.log("Starting room 2");
+                                    this.scene.restart({
+
+                                        room: 'world_1_room_2',
+                                        key_tile_x: TILEDIMENSION * 2 + TILEDIMENSION / 2,
+                                        key_tile_y: TILEDIMENSION * 7 + TILEDIMENSION / 2,
+
+                                    });
+                                } else if (this.room === 'world_1_room_2') {
+
+                                    console.log("starting room 3");
+                                    this.scene.restart({
+
+                                        room: 'world_1_room_3',
+                                        key_tile_x: TILEDIMENSION * 5 + TILEDIMENSION / 2,
+                                        key_tile_y: TILEDIMENSION * 2 + TILEDIMENSION / 2,
+
+                                    });
+                                }
+                            }); 
+
         const HOME_BTN = this.add.image(64 * 4.5 + 32, 576 - 28, 'world_1_quit').setInteractive({ useHandCursor: true });
 
         HOME_BTN.on('pointerover', () => {
@@ -105,5 +135,23 @@ export class World_1 extends Scene {
                 this.scene.restart({mode: 'hard'});
             });
         }
+
+        const key_tile = new KeyTile(
+            this,
+            this.key_tile_x,
+            this.key_tile_y,
+            'world_1_key_animation',
+        );
+
+        this.events.on('start_key_animation', () => {
+
+            console.log('Animation event received in MainScene');
+            key_tile.playAnimation();
+        });
+
+        console.log("emitting key tile")
+        this.events.emit('start_key_animation');
+        console.log("key tile emitted")
+        
     }
 }

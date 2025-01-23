@@ -24,7 +24,7 @@ export class Preloader extends Phaser.Scene {
         this.load.tilemapCSV("world_1_room_3", "world_1/map/room_3.csv");
         this.load.atlas("world_1_door_left_animation", "world_1/map/door_left_animation.png", "world_1/map/door_left_animation.json");
         this.load.atlas("world_1_door_top_animation", "world_1/map/door_top_animation.png", "world_1/map/door_top_animation.json");
-        this.load.atlas("world_1_door_key_animation", "world_1/map/door_key_animation.png", "world_1/map/door_key_animation.json");
+        this.load.atlas("world_1_key_animation", "world_1/map/door_key_animation.png", "world_1/map/door_key_animation.json");
         this.load.atlas("world_1_wall_animation", "world_1/map/wall_animation.png", "world_1/map/wall_animation.json");
 
         // Buttons
