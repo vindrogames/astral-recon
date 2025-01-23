@@ -1,6 +1,8 @@
 import { Game } from "phaser";
 import { Preloader } from "./preloader";
 import { StartScene } from "./scenes/StartScene";
+import { World_1 } from "./scenes/World_1";
+import { World_2 } from "./scenes/World_2";
 
 const TILE_SIZE = 64;
 const NUM_TILES = 9;
@@ -30,7 +32,10 @@ const config = {
     },
     scene: [
         Preloader,
-        StartScene
+        StartScene,
+        World_1,
+        World_2
+
     ]
 };
 

@@ -15,10 +15,6 @@ export class Preloader extends Phaser.Scene {
         this.load.image("world_2_button", "start_screen/world_2_button.png");
         this.load.atlas("worlds_recon_animation", "start_screen/worlds_recon_animation.png", "start_screen/worlds_recon_animation.json");
         this.load.image("tupac_complete", "/start_screen/tupac_complete.png");
-
-        // Home buttons to leave worlds
-        this.load.image("nav_home", "nav_home.png");
-        this.load.image("nav_home_hover", "nav_home_hover.png");
         
         // World 1
         // Map assets
@@ -36,6 +32,8 @@ export class Preloader extends Phaser.Scene {
         this.load.image("world_1_easy_on", "world_1/buttons/easy_on.png");
         this.load.image("world_1_hard_off", "world_1/buttons/hard_off.png");
         this.load.image("world_1_hard_on", "world_1/buttons/hard_on.png");
+        this.load.image("world_1_quit", "world_1/buttons/world_1_quit.png");
+        this.load.image("world_1_quit_hover", "world_1/buttons/world_1_quit_hover.png");
 
         // Avatars assets
         this.load.atlas("world_1_mach_animation_all", "world_1/avatars/mach_animation_all.png", "world_1/avatars/mach_animation_all.json");
@@ -59,6 +57,8 @@ export class Preloader extends Phaser.Scene {
         this.load.image("world_2_easy_on", "world_2/buttons/easy_on.png");
         this.load.image("world_2_hard_off", "world_2/buttons/hard_off.png");
         this.load.image("world_2_hard_on", "world_2/buttons/hard_on.png");
+        this.load.image("world_2_quit", "world_2/buttons/world_2_quit.png");
+        this.load.image("world_2_quit_hover", "world_2/buttons/world_2_quit_hover.png");
 
         // Avatar Assets
     }
