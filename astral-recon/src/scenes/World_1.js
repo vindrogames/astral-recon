@@ -76,7 +76,7 @@ export class World_1 extends Scene {
                                 }
                             }); 
 
-        const HOME_BTN = this.add.image(64 * 4.5 + 32, 576 - 28, 'world_1_quit').setInteractive({ useHandCursor: true });
+        const HOME_BTN = this.add.image(64 * 4.5 + 128, 576 - 28, 'world_1_quit').setInteractive({ useHandCursor: true });
 
         HOME_BTN.on('pointerover', () => {
 
@@ -143,15 +143,9 @@ export class World_1 extends Scene {
             'world_1_key_animation',
         );
 
-        this.events.on('start_key_animation', () => {
+        key_tile.playAnimation();
 
-            console.log('Animation event received in MainScene');
-            key_tile.playAnimation();
-        });
-
-        console.log("emitting key tile")
-        this.events.emit('start_key_animation');
-        console.log("key tile emitted")
+        
         
     }
 }
