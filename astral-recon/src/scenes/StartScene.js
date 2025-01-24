@@ -14,12 +14,12 @@ export class StartScene extends Scene {
 
     // Se incluye params para los 3 avatares de los 3 mundos.
     // Al finalizar cada World, pasamos el param como true al empezar el Start Scene de nuevo
-    init(avatars) {
+    init(params) {
         this.cameras.main.fadeIn(1000, 0, 0, 0);
 
-        this.tupac_complete = avatars.tupac || false;
-        this.elvis_complete = avatars.elvis || false;
-        this.michael_complete = avatars.michael || false;
+        this.tupac_complete = params.tupac || false;
+        this.elvis_complete = params.elvis || false;
+        this.michael_complete = params.michael || false;
     }
 
     create() {

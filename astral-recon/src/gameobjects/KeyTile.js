@@ -1,0 +1,26 @@
+import { GameObjects } from "phaser";
+
+export class KeyTile extends GameObjects.Sprite {
+
+    constructor(scene, x, y, asset) {
+
+        super(scene, x, y, asset);
+
+        scene.add.existing(this);
+
+        if (!scene.anims.exists('key_tile')) {
+            scene.anims.create({
+
+                key: 'key_tile', 
+                frames: scene.anims.generateFrameNames(asset, { prefix: 'keyTile_', end: 23, zeroPad: 4 }), 
+                repeat: -1,
+                frameRate: 8,
+            }); 
+        }
+    }
+
+    playAnimation() {
+
+        this.play('key_tile', true);
+    }
+}
