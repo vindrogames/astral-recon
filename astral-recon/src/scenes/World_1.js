@@ -1,5 +1,6 @@
 import { Scene } from "phaser";
-import { KeyTile }  from "../gameobjects/KeyTile.js"
+import { KeyTile }  from "../gameobjects/KeyTile.js";
+import { Player } from "../gameobjects/Player.js";
 
 
 // general specs. I want to import this from config.js
@@ -41,6 +42,8 @@ export class World_1 extends Scene {
         this.complete = params.complete || false;
         this.key_tile_x = params.key_tile_x || TILEDIMENSION * 5 + TILEDIMENSION / 2;
         this.key_tile_y = params.key_tile_y || TILEDIMENSION * 5 + TILEDIMENSION / 2;
+        this.player_x = params.player_x || TILEDIMENSION * 4 + TILEDIMENSION / 2;
+        this.player_y = params.player_y || TILEDIMENSION * 4 + TILEDIMENSION / 2;
     }
 
     create() {
@@ -61,6 +64,8 @@ export class World_1 extends Scene {
                                         room: 'world_1_room_2',
                                         key_tile_x: TILEDIMENSION * 2 + TILEDIMENSION / 2,
                                         key_tile_y: TILEDIMENSION * 7 + TILEDIMENSION / 2,
+                                        player_x: TILEDIMENSION * 4 + TILEDIMENSION / 2,
+                                        player_y: TILEDIMENSION * 4 + TILEDIMENSION / 2,
 
                                     });
                                 } else if (this.room === 'world_1_room_2') {
@@ -71,6 +76,8 @@ export class World_1 extends Scene {
                                         room: 'world_1_room_3',
                                         key_tile_x: TILEDIMENSION * 5 + TILEDIMENSION / 2,
                                         key_tile_y: TILEDIMENSION * 2 + TILEDIMENSION / 2,
+                                        player_x: TILEDIMENSION * 4 + TILEDIMENSION / 2,
+                                        player_y: TILEDIMENSION * 4 + TILEDIMENSION / 2,
 
                                     });
                                 }
@@ -145,7 +152,21 @@ export class World_1 extends Scene {
 
         key_tile.playAnimation();
 
+        this.player = new Player(
+            this,
+            this.player_x,
+            this.player_y,
+            'player_animation'
+        );
         
+        this.physics.world.setBounds(0, 0, GAME_WIDTH, GAME_HEIGHT);
+        this.player.body.setCollideWorldBounds(true);
         
+    }
+    
+    update() {
+        if (this.player) {
+            this.player.update();
+        }
     }
 }
