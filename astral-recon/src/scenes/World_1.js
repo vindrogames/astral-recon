@@ -1,6 +1,7 @@
 import { Scene } from "phaser";
 import { KeyTile }  from "../gameobjects/KeyTile.js";
 import { Player } from "../gameobjects/Player.js";
+import { Wall } from "../gameobjects/Wall.js";
 
 
 // general specs. I want to import this from config.js
@@ -51,6 +52,25 @@ export class World_1 extends Scene {
         var map = this.make.tilemap({ key: this.room, tileWidth: TILEDIMENSION, tileHeight: TILEDIMENSION });
         var tileset = map.addTilesetImage('world_1_tileset_64', null, TILEDIMENSION, TILEDIMENSION, 0, 0);       
         var layer = map.createLayer('layer', tileset, 0, 0);
+        
+        this.tilemap = map;
+
+        this.walls = [];
+        
+        for (let y = 0; y < map.height; y++) {
+            for (let x = 0; x < map.width; x++) {
+                const tile = map.getTileAt(x, y);
+                if (tile && tile.index === TILE_DEATH) {
+                    const wall = new Wall(
+                        this,
+                        x * TILEDIMENSION + TILEDIMENSION / 2,
+                        y * TILEDIMENSION + TILEDIMENSION / 2,
+                        'world_1_wall_animation'
+                    );
+                    this.walls.push(wall);
+                }
+            }
+        }
 
         const levelBtn = this.add.text(56, 56, 'Next Level', {fontSize: '14px', color: 'black'})
                             .setInteractive({ useHandCursor: true })
@@ -163,10 +183,24 @@ export class World_1 extends Scene {
         this.player.body.setCollideWorldBounds(true);
         
     }
+
+    triggerWallAt(tileX, tileY) {
+        this.walls.forEach(wall => {
+            const wallTileX = Math.round((wall.x - TILEDIMENSION/2) / TILEDIMENSION);
+            const wallTileY = Math.round((wall.y - TILEDIMENSION/2) / TILEDIMENSION);
+            
+            if (wallTileX === tileX && wallTileY === tileY && !wall.isTriggered) {
+                wall.triggerWall();
+            }
+        });
+    }
     
     update() {
         if (this.player) {
             this.player.update();
+            
+            const playerTilePos = this.player.getTilePosition();
+            
         }
     }
 }

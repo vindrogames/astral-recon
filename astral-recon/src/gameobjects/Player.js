@@ -16,6 +16,9 @@ export class Player extends GameObjects.Sprite {
         this.isMoving = false;
         this.currentDirection = 'down';
         
+        this.startX = x;
+        this.startY = y;
+        
         this.createAnimations(scene, asset);
         this.play('idle_front');
         
@@ -102,6 +105,26 @@ export class Player extends GameObjects.Sprite {
             return;
         }
         
+        const newTileX = Math.round((newX - this.tileSize/2) / this.tileSize);
+        const newTileY = Math.round((newY - this.tileSize/2) / this.tileSize);
+        
+        if (this.scene.tilemap) {
+            const tile = this.scene.tilemap.getTileAt(newTileX, newTileY);
+            if (tile) {
+                if (tile.index === 3) {
+                    this.currentDirection = direction;
+                    this.scene.triggerWallAt(newTileX, newTileY);
+                    this.die();
+                    return;
+                }
+                
+                const borderWalls = [5, 6, 8, 9, 10, 11, 12, 13];
+                if (borderWalls.includes(tile.index)) {
+                    return;
+                }
+            }
+        }
+        
         this.isMoving = true;
         this.currentDirection = direction;
         this.play(`walk_${direction}`, true);
@@ -120,22 +143,43 @@ export class Player extends GameObjects.Sprite {
     }
 
     die() {
-        this.body.enable = false;
+        this.isMoving = false;
         const deathAnim = `die_${this.currentDirection}`;
-        this.play(deathAnim, true);
         
-        this.once('animationcomplete', () => {
-            this.scene.time.delayedCall(1000, () => {
-                this.scene.scene.restart();
-            });
+        this.anims.stop();
+        
+        if (this.scene.anims.exists(deathAnim)) {
+            this.play(deathAnim);
+            console.log("muere bien");
+            this.setTint(0xff0000);
+        } else {
+            this.setFrame(16);
+            this.setTint(0xff0000);
+        }
+        
+        this.body.enable = false;
+        
+        this.scene.time.delayedCall(1500, () => {
+            this.respawn();
         });
+    }
+    
+    respawn() {
+        this.reset(this.startX, this.startY);
     }
 
     reset(x, y) {
+        this.removeAllListeners();
         this.setPosition(x, y);
         this.body.enable = true;
+        this.body.setVelocity(0, 0);
         this.isMoving = false;
         this.currentDirection = 'down';
+        
+        this.clearTint();
+        this.setAlpha(1);
+        this.setVisible(true);
+        
         this.play('idle_front', true);
     }
 
