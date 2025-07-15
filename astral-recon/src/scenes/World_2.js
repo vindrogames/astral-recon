@@ -1,4 +1,5 @@
 import { Scene } from "phaser";
+import { Player } from "../gameobjects/Player.js";
 
 // general specs. I want to import this from config.js
 const TILE_SIZE = 64;
@@ -31,9 +32,11 @@ export class World_2 extends Scene {
         super("World_2");
     }
 
-    init(difficulty) {
+    init(params) {
 
-        this.mode = difficulty.mode || 'hard';
+        this.mode = params.mode || 'hard';
+        this.player_x = params.player_x || TILEDIMENSION * 4 + TILEDIMENSION / 2;
+        this.player_y = params.player_y || TILEDIMENSION * 4 + TILEDIMENSION / 2;
 
         this.cameras.main.fadeIn(1000, 0, 0, 0);
         //this.scene.launch("World_2");
@@ -104,6 +107,22 @@ export class World_2 extends Scene {
 
                 this.scene.restart({mode: 'hard'});
             });
+        }
+        
+        this.player = new Player(
+            this,
+            this.player_x,
+            this.player_y,
+            'player_animation'
+        );
+        
+        this.physics.world.setBounds(0, 0, GAME_WIDTH, GAME_HEIGHT);
+        this.player.body.setCollideWorldBounds(true);
+    }
+    
+    update() {
+        if (this.player) {
+            this.player.update();
         }
     }
 }

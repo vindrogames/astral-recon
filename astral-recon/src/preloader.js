@@ -61,6 +61,9 @@ export class Preloader extends Phaser.Scene {
         this.load.image("world_2_quit_hover", "world_2/buttons/world_2_quit_hover.png");
 
         // Avatar Assets
+        
+        // Player Assets
+        this.load.atlas("player_animation", "player/mach_animation_all.png", "player/mach_animation_all.json");
     }
 
     create() {
