@@ -29,6 +29,20 @@ const TILE_WALL_RIGHT = 13;
 const TILE_WALL_FIXED = 20;
 const TUPAC_SHOW = 19;
 
+const KEY_POSITION_ROOM_1_X = 2;
+const KEY_POSITION_ROOM_1_Y = 2;
+const KEY_POSITION_ROOM_2_X = 7;
+const KEY_POSITION_ROOM_2_Y = 2;
+const KEY_POSITION_ROOM_3_X = 2;
+const KEY_POSITION_ROOM_3_Y = 3;
+
+const PLAYER_POSITION_ROOM_1_X = 1;
+const PLAYER_POSITION_ROOM_1_Y = 1;
+const PLAYER_POSITION_ROOM_2_X = 8;
+const PLAYER_POSITION_ROOM_2_Y = 4;
+const PLAYER_POSITION_ROOM_3_X = 1;
+const PLAYER_POSITION_ROOM_3_Y = 1;
+
 export class World_1 extends Scene {
 
     constructor() {
@@ -41,10 +55,11 @@ export class World_1 extends Scene {
         this.mode = params.mode || 'hard';
         this.room = params.room || 'world_1_room_1';
         this.complete = params.complete || false;
-        this.key_tile_x = params.key_tile_x || TILEDIMENSION * 5 + TILEDIMENSION / 2;
-        this.key_tile_y = params.key_tile_y || TILEDIMENSION * 5 + TILEDIMENSION / 2;
-        this.player_x = params.player_x || TILEDIMENSION * 4 + TILEDIMENSION / 2;
-        this.player_y = params.player_y || TILEDIMENSION * 4 + TILEDIMENSION / 2;
+        this.key_tile_x = params.key_tile_x || TILEDIMENSION * KEY_POSITION_ROOM_1_X + TILEDIMENSION / 2;
+        this.key_tile_y = params.key_tile_y || TILEDIMENSION * KEY_POSITION_ROOM_1_Y + TILEDIMENSION / 2;
+        this.player_x = params.player_x || TILEDIMENSION * PLAYER_POSITION_ROOM_1_X + TILEDIMENSION / 2;
+        this.player_y = params.player_y || TILEDIMENSION * PLAYER_POSITION_ROOM_1_Y + TILEDIMENSION / 2;
+        this.hasKey = params.hasKey || false;
     }
 
     create() {
@@ -82,10 +97,10 @@ export class World_1 extends Scene {
                                     this.scene.restart({
 
                                         room: 'world_1_room_2',
-                                        key_tile_x: TILEDIMENSION * 2 + TILEDIMENSION / 2,
-                                        key_tile_y: TILEDIMENSION * 7 + TILEDIMENSION / 2,
-                                        player_x: TILEDIMENSION * 4 + TILEDIMENSION / 2,
-                                        player_y: TILEDIMENSION * 4 + TILEDIMENSION / 2,
+                                        key_tile_x: TILEDIMENSION * KEY_POSITION_ROOM_2_X + TILEDIMENSION / 2,
+                                        key_tile_y: TILEDIMENSION * KEY_POSITION_ROOM_2_Y + TILEDIMENSION / 2,
+                                        player_x: TILEDIMENSION * PLAYER_POSITION_ROOM_2_X + TILEDIMENSION / 2,
+                                        player_y: TILEDIMENSION * PLAYER_POSITION_ROOM_2_Y + TILEDIMENSION / 2,
 
                                     });
                                 } else if (this.room === 'world_1_room_2') {
@@ -94,10 +109,10 @@ export class World_1 extends Scene {
                                     this.scene.restart({
 
                                         room: 'world_1_room_3',
-                                        key_tile_x: TILEDIMENSION * 5 + TILEDIMENSION / 2,
-                                        key_tile_y: TILEDIMENSION * 2 + TILEDIMENSION / 2,
-                                        player_x: TILEDIMENSION * 4 + TILEDIMENSION / 2,
-                                        player_y: TILEDIMENSION * 4 + TILEDIMENSION / 2,
+                                        key_tile_x: TILEDIMENSION * KEY_POSITION_ROOM_3_X + TILEDIMENSION / 2,
+                                        key_tile_y: TILEDIMENSION * KEY_POSITION_ROOM_3_Y + TILEDIMENSION / 2,
+                                        player_x: TILEDIMENSION * PLAYER_POSITION_ROOM_3_X + TILEDIMENSION / 2,
+                                        player_y: TILEDIMENSION * PLAYER_POSITION_ROOM_3_Y + TILEDIMENSION / 2,
 
                                     });
                                 }
@@ -163,14 +178,19 @@ export class World_1 extends Scene {
             });
         }
 
-        const key_tile = new KeyTile(
-            this,
-            this.key_tile_x,
-            this.key_tile_y,
-            'world_1_key_animation',
-        );
+        if (!this.hasKey) {
+            this.key_tile = new KeyTile(
+                this,
+                this.key_tile_x,
+                this.key_tile_y,
+                'world_1_key_animation',
+            );
+            this.key_tile.playAnimation();
+            this.physics.add.existing(this.key_tile);
+            this.key_tile.body.setSize(48, 48);
+        }
 
-        key_tile.playAnimation();
+        this.createDoorSprites();
 
         this.player = new Player(
             this,
@@ -182,6 +202,131 @@ export class World_1 extends Scene {
         this.physics.world.setBounds(0, 0, GAME_WIDTH, GAME_HEIGHT);
         this.player.body.setCollideWorldBounds(true);
         
+        if (!this.hasKey && this.key_tile) {
+            this.physics.add.overlap(this.player, this.key_tile, this.collectKey, null, this);
+        }
+        
+    }
+
+    createDoorSprites() {
+        this.doorSprites = [];
+        
+        if (!this.tilemap) return;
+        
+        for (let x = 0; x < this.tilemap.width; x++) {
+            for (let y = 0; y < this.tilemap.height; y++) {
+                const tile = this.tilemap.getTileAt(x, y);
+                if (tile && tile.index === 16) {
+                    const doorSprite = this.add.sprite(
+                        x * TILEDIMENSION + TILEDIMENSION / 2,
+                        y * TILEDIMENSION + TILEDIMENSION / 2,
+                        'world_1_door_left_animation',
+                        'door0.png'
+                    );
+                    
+                    doorSprite.setVisible(false);
+                    
+                    if (!this.anims.exists('door_open')) {
+                        this.anims.create({
+                            key: 'door_open',
+                            frames: this.anims.generateFrameNames('world_1_door_left_animation', {
+                                prefix: 'door',
+                                suffix: '.png',
+                                start: 0,
+                                end: 5
+                            }),
+                            frameRate: 10,
+                            repeat: 0
+                        });
+                    }
+                    
+                    this.doorSprites.push({
+                        sprite: doorSprite,
+                        tileX: x,
+                        tileY: y
+                    });
+                }
+            }
+        }
+    }
+
+    collectKey() {
+        if (this.key_tile) {
+            this.key_tile.destroy();
+            this.key_tile = null;
+            this.hasKey = true;
+            this.playDoorAnimations();
+        }
+    }
+
+    playDoorAnimations() {
+        if (!this.doorSprites) return;
+        
+        this.doorSprites.forEach(doorData => {
+            doorData.sprite.setVisible(true);
+            doorData.sprite.play('door_open');
+            
+            doorData.sprite.on('animationcomplete', () => {
+                this.updateDoorTiles();
+            });
+        });
+    }
+
+    updateDoorTiles() {
+        if (!this.tilemap) return;
+        
+        const layer = this.tilemap.getLayer('layer');
+        if (!layer) return;
+        
+        for (let x = 0; x < this.tilemap.width; x++) {
+            for (let y = 0; y < this.tilemap.height; y++) {
+                const tile = this.tilemap.getTileAt(x, y);
+                if (tile && tile.index === 16) {
+                    let newTileIndex;
+                    if (this.room === 'world_1_room_1') {
+                        newTileIndex = 15;
+                    } else if (this.room === 'world_1_room_2') {
+                        newTileIndex = 22;
+                    }
+                    
+                    if (newTileIndex) {
+                        this.tilemap.putTileAt(newTileIndex, x, y);
+                    }
+                }
+            }
+        }
+        
+        if (this.doorSprites) {
+            this.doorSprites.forEach(doorData => {
+                doorData.sprite.setVisible(false);
+            });
+        }
+    }
+
+    handleDoorTransition(tileX, tileY) {
+        if (!this.hasKey) return;
+        
+        if (this.room === 'world_1_room_1') {
+            console.log("Starting room 2");
+            this.scene.restart({
+                room: 'world_1_room_2',
+                key_tile_x: TILEDIMENSION * KEY_POSITION_ROOM_2_X + TILEDIMENSION / 2,
+                key_tile_y: TILEDIMENSION * KEY_POSITION_ROOM_2_Y + TILEDIMENSION / 2,
+                player_x: TILEDIMENSION * PLAYER_POSITION_ROOM_2_X + TILEDIMENSION / 2,
+                player_y: TILEDIMENSION * PLAYER_POSITION_ROOM_2_Y + TILEDIMENSION / 2,
+                hasKey: false
+            });
+        } else if (this.room === 'world_1_room_2') {
+            console.log("starting room 3");
+            this.scene.restart({
+                room: 'world_1_room_3',
+                key_tile_x: TILEDIMENSION * KEY_POSITION_ROOM_3_X + TILEDIMENSION / 2,
+                key_tile_y: TILEDIMENSION * KEY_POSITION_ROOM_3_Y + TILEDIMENSION / 2,
+                player_x: TILEDIMENSION * PLAYER_POSITION_ROOM_3_X + TILEDIMENSION / 2,
+                player_y: TILEDIMENSION * PLAYER_POSITION_ROOM_3_Y + TILEDIMENSION / 2,
+                hasKey: false
+            });
+        }
     }
 
     triggerWallAt(tileX, tileY) {

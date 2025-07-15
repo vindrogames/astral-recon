@@ -118,8 +118,13 @@ export class Player extends GameObjects.Sprite {
                     return;
                 }
                 
-                const borderWalls = [5, 6, 8, 9, 10, 11, 12, 13];
+                const borderWalls = [5, 6, 8, 9, 10, 11, 12, 13, 16];
                 if (borderWalls.includes(tile.index)) {
+                    return;
+                }
+                
+                if (tile.index === 15 || tile.index === 22) {
+                    this.scene.handleDoorTransition(newTileX, newTileY);
                     return;
                 }
             }
