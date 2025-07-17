@@ -12,9 +12,9 @@ export class KeyTile extends GameObjects.Sprite {
             scene.anims.create({
 
                 key: 'key_tile', 
-                frames: scene.anims.generateFrameNames(asset, { prefix: 'keyTile_', end: 23, zeroPad: 4 }), 
+                frames: scene.anims.generateFrameNames(asset, { prefix: 'keyTile_', end: 11, zeroPad: 4 }), 
                 repeat: -1,
-                frameRate: 8,
+                frameRate: 12,
             }); 
         }
     }
