@@ -35,7 +35,6 @@ const config = {
         StartScene,
         World_1,
         World_2
-
     ]
 };
 
