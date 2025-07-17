@@ -8,21 +8,7 @@
                 "h": 128
             },
             "rotated": false,
-            "trimmed": false,
-            "spriteSourceSize": {
-                "x": 0,
-                "y": 0,
-                "w": 64,
-                "h": 128
-            },
-            "sourceSize": {
-                "w": 64,
-                "h": 128
-            },
-            "pivot": {
-                "x": 0.5,
-                "y": 0.5
-            }
+            "trimmed": false
         },
         "tupac_reveal_0001": {
             "frame": {
@@ -32,21 +18,7 @@
                 "h": 128
             },
             "rotated": false,
-            "trimmed": false,
-            "spriteSourceSize": {
-                "x": 0,
-                "y": 0,
-                "w": 64,
-                "h": 128
-            },
-            "sourceSize": {
-                "w": 64,
-                "h": 128
-            },
-            "pivot": {
-                "x": 0.5,
-                "y": 0.5
-            }
+            "trimmed": false
         },
         "tupac_reveal_0002": {
             "frame": {
@@ -56,21 +28,7 @@
                 "h": 128
             },
             "rotated": false,
-            "trimmed": false,
-            "spriteSourceSize": {
-                "x": 0,
-                "y": 0,
-                "w": 64,
-                "h": 128
-            },
-            "sourceSize": {
-                "w": 64,
-                "h": 128
-            },
-            "pivot": {
-                "x": 0.5,
-                "y": 0.5
-            }
+            "trimmed": false
         },
         "tupac_reveal_0003": {
             "frame": {
@@ -80,21 +38,7 @@
                 "h": 128
             },
             "rotated": false,
-            "trimmed": false,
-            "spriteSourceSize": {
-                "x": 0,
-                "y": 0,
-                "w": 64,
-                "h": 128
-            },
-            "sourceSize": {
-                "w": 64,
-                "h": 128
-            },
-            "pivot": {
-                "x": 0.5,
-                "y": 0.5
-            }
+            "trimmed": false
         },
         "tupac_reveal_0004": {
             "frame": {
@@ -104,21 +48,7 @@
                 "h": 128
             },
             "rotated": false,
-            "trimmed": false,
-            "spriteSourceSize": {
-                "x": 0,
-                "y": 0,
-                "w": 64,
-                "h": 128
-            },
-            "sourceSize": {
-                "w": 64,
-                "h": 128
-            },
-            "pivot": {
-                "x": 0.5,
-                "y": 0.5
-            }
+            "trimmed": false
         },
         "tupac_reveal_0005": {
             "frame": {
@@ -128,21 +58,7 @@
                 "h": 128
             },
             "rotated": false,
-            "trimmed": false,
-            "spriteSourceSize": {
-                "x": 0,
-                "y": 0,
-                "w": 64,
-                "h": 128
-            },
-            "sourceSize": {
-                "w": 64,
-                "h": 128
-            },
-            "pivot": {
-                "x": 0.5,
-                "y": 0.5
-            }
+            "trimmed": false
         },
         "tupac_reveal_0006": {
             "frame": {
@@ -152,21 +68,7 @@
                 "h": 128
             },
             "rotated": false,
-            "trimmed": false,
-            "spriteSourceSize": {
-                "x": 0,
-                "y": 0,
-                "w": 64,
-                "h": 128
-            },
-            "sourceSize": {
-                "w": 64,
-                "h": 128
-            },
-            "pivot": {
-                "x": 0.5,
-                "y": 0.5
-            }
+            "trimmed": false
         },
         "tupac_reveal_0007": {
             "frame": {
@@ -176,21 +78,7 @@
                 "h": 128
             },
             "rotated": false,
-            "trimmed": false,
-            "spriteSourceSize": {
-                "x": 0,
-                "y": 0,
-                "w": 64,
-                "h": 128
-            },
-            "sourceSize": {
-                "w": 64,
-                "h": 128
-            },
-            "pivot": {
-                "x": 0.5,
-                "y": 0.5
-            }
+            "trimmed": false
         },
         "tupac_reveal_0008": {
             "frame": {
@@ -200,21 +88,7 @@
                 "h": 128
             },
             "rotated": false,
-            "trimmed": false,
-            "spriteSourceSize": {
-                "x": 0,
-                "y": 0,
-                "w": 64,
-                "h": 128
-            },
-            "sourceSize": {
-                "w": 64,
-                "h": 128
-            },
-            "pivot": {
-                "x": 0.5,
-                "y": 0.5
-            }
+            "trimmed": false
         },
         "tupac_reveal_0009": {
             "frame": {
@@ -224,21 +98,7 @@
                 "h": 128
             },
             "rotated": false,
-            "trimmed": false,
-            "spriteSourceSize": {
-                "x": 0,
-                "y": 0,
-                "w": 64,
-                "h": 128
-            },
-            "sourceSize": {
-                "w": 64,
-                "h": 128
-            },
-            "pivot": {
-                "x": 0.5,
-                "y": 0.5
-            }
+            "trimmed": false
         },
         "tupac_reveal_0010": {
             "frame": {
@@ -248,21 +108,7 @@
                 "h": 128
             },
             "rotated": false,
-            "trimmed": false,
-            "spriteSourceSize": {
-                "x": 0,
-                "y": 0,
-                "w": 64,
-                "h": 128
-            },
-            "sourceSize": {
-                "w": 64,
-                "h": 128
-            },
-            "pivot": {
-                "x": 0.5,
-                "y": 0.5
-            }
+            "trimmed": false
         },
         "tupac_reveal_0011": {
             "frame": {
@@ -272,21 +118,35 @@
                 "h": 128
             },
             "rotated": false,
-            "trimmed": false,
-            "spriteSourceSize": {
-                "x": 0,
-                "y": 0,
-                "w": 64,
-                "h": 128
-            },
-            "sourceSize": {
-                "w": 64,
-                "h": 128
-            },
-            "pivot": {
-                "x": 0.5,
-                "y": 0.5
-            }
+            "trimmed": false
         }
+    },
+    "meta": {
+        "app": "Vindrogames Sprite Sheet Generator",
+        "version": "1.0",
+        "author": "Vindrogames",
+        "created": "2025-07-17",
+        "description": "Animated sprite for final character reveal used in Astral Recon World 1.",
+        "image": "tupac_reveal_animation.png",
+        "format": "RGBA8888",
+        "size": {
+            "w": 64,
+            "h": 1536
+        },
+        "scale": "1",
+        "frameCount": 12,
+        "frameSize": {
+            "w": 64,
+            "h": 128
+        },
+        "loop": false,
+        "tags": [
+            "key",
+            "tile",
+            "animation",
+            "astral-recon",
+            "tupac-reveal"
+        ],
+        "license": "All Rights Reserved"
     }
 }

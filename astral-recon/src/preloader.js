@@ -22,9 +22,9 @@ export class Preloader extends Phaser.Scene {
         this.load.tilemapCSV("world_1_room_1", "world_1/map/room_1.csv");
         this.load.tilemapCSV("world_1_room_2", "world_1/map/room_2.csv");
         this.load.tilemapCSV("world_1_room_3", "world_1/map/room_3.csv");
-        this.load.atlas("world_1_door_left_animation", "world_1/map/door_left_animation.png", "world_1/map/door_left_animation.json");
-        this.load.atlas("world_1_door_top_animation", "world_1/map/door_top_animation.png", "world_1/map/door_top_animation.json");
-        this.load.atlas("world_1_key_animation", "world_1/map/door_key_animation.png", "world_1/map/door_key_animation.json");
+        this.load.atlas("world_1_door_left_animation", "world_1/map/door_left_open_animation.png", "world_1/map/door_left_open_animation.json");
+        this.load.atlas("world_1_door_top_animation", "world_1/map/door_top_open_animation.png", "world_1/map/door_top_open_animation.json");
+        this.load.atlas("world_1_key_animation", "world_1/map/key_tile_animation.png", "world_1/map/key_tile_animation.json");
         this.load.atlas("world_1_wall_animation", "world_1/map/wall_animation.png", "world_1/map/wall_animation.json");
 
         // Buttons
@@ -33,7 +33,7 @@ export class Preloader extends Phaser.Scene {
         this.load.image("world_1_hard_off", "world_1/buttons/hard_off.png");
         this.load.image("world_1_hard_on", "world_1/buttons/hard_on.png");
         this.load.image("world_1_quit", "world_1/buttons/quit_btn.png");
-        this.load.image("world_1_quit_hover", "world_1/buttons/quit_hover.png");
+        this.load.image("world_1_quit_hover", "world_1/buttons/quit_btn_hover.png");
 
         // Avatars assets
         this.load.atlas("world_1_mach_animation_all", "world_1/avatars/mach_animation_all.png", "world_1/avatars/mach_animation_all.json");
@@ -49,7 +49,7 @@ export class Preloader extends Phaser.Scene {
         this.load.tilemapCSV("world_2_room_1", "world_2/map/room_1.csv");
         this.load.tilemapCSV("world_2_room_2", "world_2/map/room_2.csv");
         this.load.tilemapCSV("world_2_room_3", "world_2/map/room_3.csv");
-        this.load.atlas("world_2_final_key_animation", "world_2/map/final_key_animation.png", "world_2/map/final_key_animation.json");
+        this.load.atlas("world_2_key_animation", "world_2/map/key_tile_animation.png", "world_2/map/key_tile_animation.json");
         //this.load.atlas("world_2_wall_animation", "world_2/map/wall_animation.png", "world_2/map/wall_animation.json");
 
         // Buttons
@@ -57,8 +57,8 @@ export class Preloader extends Phaser.Scene {
         this.load.image("world_2_easy_on", "world_2/buttons/easy_on.png");
         this.load.image("world_2_hard_off", "world_2/buttons/hard_off.png");
         this.load.image("world_2_hard_on", "world_2/buttons/hard_on.png");
-        this.load.image("world_2_quit", "world_2/buttons/world_2_quit.png");
-        this.load.image("world_2_quit_hover", "world_2/buttons/world_2_quit_hover.png");
+        this.load.image("world_2_quit", "world_2/buttons/quit_btn.png");
+        this.load.image("world_2_quit_hover", "world_2/buttons/quit_btn_hover.png");
 
         // Avatar Assets
         
