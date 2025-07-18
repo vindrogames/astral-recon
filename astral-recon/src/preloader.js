@@ -9,13 +9,6 @@ export class Preloader extends Phaser.Scene {
         // Load all the assets
         this.load.setPath("assets");
         
-        // Start Sceren Assets
-        this.load.image("background", "start_screen/main_screen_start.png");
-        this.load.image("world_1_button", "start_screen/world_1_button.png");
-        this.load.image("world_2_button", "start_screen/world_2_button.png");
-        this.load.atlas("worlds_recon_animation", "start_screen/worlds_recon_animation.png", "start_screen/worlds_recon_animation.json");
-        this.load.image("tupac_complete", "/start_screen/tupac_complete.png");
-        
         // World 1
         // Map assets
         this.load.image("world_1_tileset_64", "world_1/map/world_1_tileset_64.png");
@@ -37,7 +30,7 @@ export class Preloader extends Phaser.Scene {
 
         // Avatars assets
         this.load.atlas("world_1_mach_animation_all", "world_1/avatars/mach_animation_all.png", "world_1/avatars/mach_animation_all.json");
-        this.load.atlas("tupac_caged_animation", "world_1/avatars/tupac_caged_animation.png", "world_1/avatars/tupac_caged_animation.json");
+        this.load.atlas("tupac_caged_animation", "world_1/avatars/tupac_caged_animation.png", "world_1/avatars/tupac_caged_animation.png");
         this.load.atlas("tupac_reveal_animation", "world_1/avatars/tupac_reveal_animation.png", "world_1/avatars/tupac_reveal_animation.json");
 
         // End Dialogue

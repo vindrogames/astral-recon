@@ -118,66 +118,6 @@ export class World_1 extends Scene {
                                 }
                             }); 
 
-        const HOME_BTN = this.add.image(64 * 4.5 + 128, 576 - 28, 'world_1_quit').setInteractive({ useHandCursor: true });
-
-        HOME_BTN.on('pointerover', () => {
-
-            HOME_BTN.setTexture('world_1_quit_hover');
-        });
-
-        HOME_BTN.on('pointerout', () => {
-
-            HOME_BTN.setTexture('world_1_quit');
-        });
-
-        HOME_BTN.on('pointerdown', () => {
-
-            this.scene.start('StartScene', { tupac: true} );
-            this.scene.stop('World_1');
-        });
-
-        if (this.mode === 'hard') {
-
-            console.log('Hard mode on');
-            const HARD_MODE_BTN = this.add.image(64 * 1.5 + 32, 576 - 28, 'world_1_hard_on').setInteractive({ useHandCursor: false });
-            const EASY_MODE_BTN = this.add.image(64 * 2.5 + 32, 576 - 28, 'world_1_easy_off').setInteractive({ useHandCursor: true });
-
-            EASY_MODE_BTN.on('pointerover', () => {
-
-                EASY_MODE_BTN.setTexture('world_1_easy_on');
-            })
-
-            EASY_MODE_BTN.on('pointerout', () => {
-
-                EASY_MODE_BTN.setTexture('world_1_easy_off');
-            });
-
-            EASY_MODE_BTN.on('pointerdown', () => {
-
-                this.scene.restart({mode: 'easy'});
-            });
-        } else if (this.mode === 'easy') {
-
-            console.log('easy mode on');
-            const HARD_MODE_BTN = this.add.image(64 * 1.5 + 32, 576 - 28, 'world_1_hard_off').setInteractive({ useHandCursor: true });
-            const EASY_MODE_BTN = this.add.image(64 * 2.5 + 32, 576 - 28, 'world_1_easy_on').setInteractive({ useHandCursor: false });
-
-            HARD_MODE_BTN.on('pointerover', () => {
-
-                HARD_MODE_BTN.setTexture('world_1_hard_on');
-            })
-
-            HARD_MODE_BTN.on('pointerout', () => {
-
-                HARD_MODE_BTN.setTexture('world_1_hard_off');
-            });
-
-            HARD_MODE_BTN.on('pointerdown', () => {
-
-                this.scene.restart({mode: 'hard'});
-            });
-        }
-
         if (!this.hasKey) {
             this.key_tile = new KeyTile(
                 this,
@@ -221,7 +161,7 @@ export class World_1 extends Scene {
                         x * TILEDIMENSION + TILEDIMENSION / 2,
                         y * TILEDIMENSION + TILEDIMENSION / 2,
                         'world_1_door_left_animation',
-                        'door0.png'
+                        'doorLeft_0000'
                     );
                     
                     doorSprite.setVisible(false);
@@ -230,12 +170,11 @@ export class World_1 extends Scene {
                         this.anims.create({
                             key: 'door_open',
                             frames: this.anims.generateFrameNames('world_1_door_left_animation', {
-                                prefix: 'door',
-                                suffix: '.png',
-                                start: 0,
-                                end: 5
+                                prefix: 'doorLeft',
+                                end: 5,
+                                eroPad: 4
                             }),
-                            frameRate: 10,
+                            frameRate: 6,
                             repeat: 0
                         });
                     }

@@ -1,8 +1,9 @@
-import { Game } from "phaser";
-import { Preloader } from "./preloader";
-import { StartScene } from "./scenes/StartScene";
-import { World_1 } from "./scenes/World_1";
-import { World_2 } from "./scenes/World_2";
+import Phaser from 'phaser';
+import Preloader from './scenes/Preloader.js';
+import StartScene from './scenes/StartScene.js';
+import World from './scenes/World.js';
+// import { World_1 } from "./scenes/World_1";
+// import { World_2 } from "./scenes/World_2";
 
 const TILE_SIZE = 64;
 const NUM_TILES = 9;
@@ -33,9 +34,8 @@ const config = {
     scene: [
         Preloader,
         StartScene,
-        World_1,
-        World_2
+        World
     ]
 };
 
-new Game(config);
+new Phaser.Game(config);
