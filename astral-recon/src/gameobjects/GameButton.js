@@ -1,24 +1,24 @@
 import { GameObjects } from 'phaser';
 
 export default class GameButton extends GameObjects.Image {
-    constructor(scene, x, y, textureOff, textureOn, onClick) {
-        super(scene, x, y, textureOff);
+    constructor(scene, x, y, textureDark, textureLight, onClick) {
+        super(scene, x, y, textureDark);
         scene.add.existing(this);
 
-        this.textureOff = textureOff;
-        this.textureOn = textureOn;
+        this.textureDark = textureDark;
+        this.textureLight = textureLight;
 
         this.setInteractive({ useHandCursor: true });
 
         this.on('pointerover', () => {
             if (this.input.enabled) {
-                this.setTexture(this.textureOn);
+                this.setTexture(this.textureLight);
             }
         });
 
         this.on('pointerout', () => {
             if (this.input.enabled) {
-                this.setTexture(this.textureOff);
+                this.setTexture(this.textureDark);
             }
         });
 
@@ -32,6 +32,6 @@ export default class GameButton extends GameObjects.Image {
     setEnabled(enabled = true) {
         this.setInteractive({ useHandCursor: enabled });
         this.input.enabled = enabled;
-        this.setTexture(enabled ? this.textureOff : this.textureOn);
+        this.setTexture(enabled ? this.textureDark : this.textureLight);
     }
 }

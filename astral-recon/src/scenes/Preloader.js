@@ -1,3 +1,4 @@
+// First scene called from main.js
 export default class Preloader extends Phaser.Scene {
     constructor() {
         super('Preloader');
@@ -10,13 +11,16 @@ export default class Preloader extends Phaser.Scene {
 
         // Start Sceren Assets
         this.load.image("background", "start_screen/main_screen_start.png");
-        this.load.image("world_1_button", "start_screen/world_1_button.png");
-        this.load.image("world_2_button", "start_screen/world_2_button.png");
+        this.load.image("world_1_btn_dark", "start_screen/world_1_btn_dark.png");
+        this.load.image("world_1_btn_light", "start_screen/world_1_btn_light.png");
+        this.load.image("world_2_btn_dark", "start_screen/world_2_btn_dark.png");
+        this.load.image("world_2_btn_light", "start_screen/world_2_btn_light.png");
         this.load.atlas("worlds_recon_animation", "start_screen/worlds_recon_animation.png", "start_screen/worlds_recon_animation.json");
         this.load.image("tupac_complete", "/start_screen/tupac_complete.png");
     }
 
+    // starts StartScreen
     create() {
-        this.scene.start('StartScene');
+        this.scene.start('Start_Scene');
     }
 }

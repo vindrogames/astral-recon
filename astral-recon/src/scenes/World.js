@@ -1,236 +1,193 @@
 // src/scenes/World.js
-
 import GameState from '../managers/GameState.js';
+import RoomManager from '../managers/RoomManager.js';
 import GameButton from '../gameobjects/GameButton.js';
-import KeyTile from '../gameobjects/KeyTile.js';
-import Door from '../gameobjects/Door.js';
 
-const uiButtons = [
-    {
-        button: 'hard',
-        pos_X: 64 * 1.5 + 32,
-        pos_Y: 576 - 28,
-        textureOn: 'hard_on',
-        textureOff: 'hard_off',
-        action: 'setHard'
-    },
-    {
-        button: 'easy',
-        pos_X: 64 * 2.5 + 32,
-        pos_Y: 576 - 28,
-        textureOn: 'easy_on',
-        textureOff: 'easy_off',
-        action: 'setEasy'
-    },
-    {
-        button: 'quit',
-        pos_X: 64 * 4.5 + 160,
-        pos_Y: 576 - 28,
-        textureOn: 'quit_btn',
-        textureOff: 'quit_btn_hover',
-        action: 'quitWorld'
-    }
-]
 
 export default class World extends Phaser.Scene {
+
     constructor() {
         super('World');
-
-        this.currentDifficulty = 'hard';
+        // buttons object to destroy and resent when quiting World
         this.buttons = {};
+        // room Objects to be destroyed both when quitting World AND changing rooms
+        this.cleanupObjects = [];
     }
 
     init(data) {
         this.cameras.main.fadeIn(1000, 0, 0, 0);
-        this.config = data; // Comes from StartScene: World1Config or World2Config
-        this.roomIndex = 1;
+
+        // Store world-specific configuration
+        this.config = data;
+        this.currentRoom = GameState.currentRoomIndex;
+        this.roomConfig = this.config.rooms[this.currentRoom];
     }
 
     preload() {
-        // Load room CSV, tilemaps, etc. dynamically if needed
-        // If using Preloader.js to load all, skip this
+
+        // When starting scene, sets path to load assets by world (asstes/world_1, assets/world_2...)
         this.load.setPath(`assets/${this.config.key}/`);
 
-        this.config.assetPaths.forEach(path => {
-
-            try {
-
-                if (path.type === 'image') {
-
-                    this.load.image(path.loadedRef, path.imgPath);
-                } else if (path.type === 'tilemapCSV') {
-
-                    this.load.tilemapCSV(path.loadedRef, path.csvPath);
-                } else if (path.type === 'atlas') {
-
-                    this.load.atlas(path.animationRef, path.imgPath, path.jsonPath);
-                }
-            } catch (err) {
-
-                console.log(err)
-            }
-
+        // Preloads each tilemap (room csv)
+        this.config.assets.tilemaps.forEach(tilemap => {
+            this.load.tilemapCSV(tilemap.assetKey, tilemap.assetPath);
         });
+
+        // Preloads each image (ui buttons, tilemset img, static images for keyPressed and openDoors)
+        this.config.assets.images.forEach(image => {
+            this.load.image(image.assetKey, image.assetPath);
+        })
+
+        // Preloads each atlas for animations (img and json atlas)
+        this.config.assets.atlases.forEach(atlas => {
+            this.load.atlas(atlas.assetKey, atlas.assetPath, atlas.atlasPath);
+        })
 
     }
 
     create() {
-        // Keep track of current room's config
-        this.loadRoom(this.roomIndex);
+        /// Create persistent UI buttons (hard, easy, quit)
+        if (!this.buttons || Object.keys(this.buttons).length === 0) {
+            this.createUiButtons();
+        }
 
-        uiButtons.forEach(btnConfig => {
-            const isQuitBtn = btnConfig.button === 'quit';
+        // Creates simulation buttons for keyTile logic, door animations and switching rooms
+        // *TO BE DELETED*
+        if (!this.simBtn || !this.nextBtn) {
+            this.createSimulationButtons();
+        }
 
+        // Initiates RoomManager for current World with World config
+        this.roomManager = new RoomManager(this, this.config);
+
+        // Small delay to load cirrent room (from here, it will be room 1)
+        this.time.delayedCall(0, () => {
+            this.roomManager.loadCurrentRoom();
+        });
+    }
+
+    // Function to create the UI buttons (again, only once)
+    createUiButtons() {
+
+        // Create UI buttons iterating over the list from World_ui_config
+        this.config.uiButtons.forEach(btnConfig => {
+
+            // Use action map to access and set corresponding difficulty functions from GameState.js
+            const actionMap = {
+                setEasy: () => {
+                    GameState.setDifficulty('easy');
+                    this.updateDifficultyUiButtons();
+                },
+                setHard: () => {
+                    GameState.setDifficulty('hard');
+                    this.updateDifficultyUiButtons();
+                },
+                quitWorld: () => this.quitWorld(this)
+            };
+
+            // creates Button Instance for each button, with corresponding positions and textures from world_config
             const btn = new GameButton(
                 this,
                 btnConfig.pos_X,
                 btnConfig.pos_Y,
-                btnConfig.textureOff,
-                btnConfig.textureOn,
-                () => this[btnConfig.action](btnConfig.button)
+                btnConfig.imgKeyDark,
+                btnConfig.imgKeyLight,
+                () => {
+                    const action = actionMap[btnConfig.onClickAction];
+                    if (action) action();
+                    else console.warn(`No handler for action: ${btnConfig.onClickAction}`);
+                }
             );
 
-            // For difficulty buttons, set enabled based on currentDifficulty
+            const isQuitBtn = btnConfig.button === 'quit';
+            // For difficulty buttons (not quit button), set enabled based on currentDifficulty from GameState.js
+            // default difficulty is hard
             if (!isQuitBtn) {
-                const isActive = btnConfig.button === this.currentDifficulty;
+                const isActive = btnConfig.button === GameState.currentDifficulty;
                 btn.setEnabled(!isActive); // disable if active (clicked)
             }
 
+            // Set high depth so when cleaning up rooms, the button textures are not removed (42 oc)
+            btn.setDepth(42);
+
+            // add button to buttons object
             this.buttons[btnConfig.button] = btn;
         });
-
-        this.createSimulationButtons();
-    }
-
-    loadRoom(index) {
-        const roomConfig = this.config.rooms[index];
-        if (!roomConfig) {
-            console.warn('No room at index', index);
-            return;
-        }
-
-        this.currentRoom = roomConfig;
-
-        // Create tilemap from CSV
-        const map = this.make.tilemap({ key: roomConfig.csv, tileWidth: 64, tileHeight: 64 });
-        const tileset = map.addTilesetImage(this.config.tilesetImage);
-        const layer = map.createLayer(0, tileset, 0, 0);
-
-        // Store map and layer for potential later use
-        this.map = map;
-        this.layer = layer;
-
-        // 🔐 Close entry door (reversed animation)
-        if (roomConfig.entryDoor) {
-            const { x, y, atlasKey, animKey, prefix } = roomConfig.entryDoor;
-            new Door(this, x, y, atlasKey, animKey, prefix, true); // true = reversed
-        }
-
-
-        this.keyTile = new KeyTile(this, roomConfig.keyTile.x, roomConfig.keyTile.y, roomConfig.keyTile.animation);
-
-        // Play animation if defined
-        if (roomConfig.keyTile.animation) {
-            console.log('playing keyTile animation')
-            this.keyTile.play(roomConfig.keyTile.animation);
-        }
-
-        // // Instantiate classes
-        // const PlayerClass = this.getClass(this.config.playerClass);
-        // this.player = new PlayerClass(this, roomConfig.playerStart.x, roomConfig.playerStart.y);
-
-
-
-        // const DoorClass = this.getClass(this.config.doorClass);
-        // this.door = new DoorClass(this, roomConfig.door.x, roomConfig.door.y);
-        // if (roomConfig.door.closedFrame !== undefined) {
-        //     this.door.setFrame(roomConfig.door.closedFrame);
-        // }
-
-        // this.physics.add.collider(this.player, this.keyTile, () => this.onKeyTileCollision());
-        // this.physics.add.collider(this.player, this.door, () => this.onDoorCollision());
-
-        // this.cameras.main.startFollow(this.player);
-    }
-
-    // onKeyTileCollision() {
-    //     const door = this.door;
-    //     this.keyTile.destroy();
-
-    //     if (this.currentRoom.door.openAnim) {
-    //         door.play(this.currentRoom.door.openAnim);
-    //     }
-
-    //     // Change tile frame if needed
-    //     if (this.currentRoom.door.openFrame !== undefined) {
-    //         door.setFrame(this.currentRoom.door.openFrame);
-    //     }
-    // }
-
-    // onDoorCollision() {
-    //     // Optional: check if door is open
-    //     if (!this.keyTile.active) {
-    //         this.transitionToNextRoom();
-    //     }
-    // }
-
-    // transitionToNextRoom() {
-    //     this.clearCurrentRoom();
-    //     this.roomIndex++;
-    //     this.loadRoom(this.roomIndex);
-    // }
-
-    // clearCurrentRoom() {
-    //     this.player?.destroy();
-    //     this.keyTile?.destroy();
-    //     this.door?.destroy();
-    //     this.layer?.destroy();
-    // }
-
-    setEasy() {
-        this.setDifficulty('easy');
-    }
-
-    setHard() {
-        this.setDifficulty('hard');
-    }
-
-    setDifficulty(newDifficulty) {
-        if (this.currentDifficulty === newDifficulty) return;
-
-        this.currentDifficulty = newDifficulty;
-
-        ['easy', 'hard'].forEach(key => {
-            const btn = this.buttons[key];
-            const config = uiButtons.find(b => b.button === key);
-            const active = key === newDifficulty;
-            btn.setEnabled(!active);
-            // Optionally update texture explicitly, but GameButton#setEnabled handles it
-        });
-
-        console.log(`Difficulty set to ${newDifficulty}`);
-        // Add additional game logic for difficulty change here
     }
 
     quitWorld() {
-        console.log('quitting world');
-        this.scene.start('StartScene', { tupac: false });
+        console.log('Quitting world...');
+
+        // Cleanup tracked objects
+        if (this.cleanupObjects) {
+            this.cleanupObjects.forEach(obj => obj?.destroy?.());
+            this.cleanupObjects = [];
+        }
+
+        // Optional: clean UI references
+        this.simBtn = null;
+        this.nextBtn = null;
+        this.buttons = {};
+
+        this.scene.cleanupObjects = [];
+        this.layer = null;
+        this.map = null;
+        this.keyTile = null;
+        this.pressedKeyTile = null;
+        this.staticOpenDoor = null;
+        this.cagedAstro = null;
+        this.tupacRevealed = null;
+        this.endDialogue = null;
+
+        // Reset game state
+        GameState.currentWorldKey = null;
+        GameState.currentRoomIndex = 0;
+        GameState.setKeyCollected(false);
+        GameState.currentDifficulty = 'hard';
+
+        this.scene.start('Start_Scene');
         this.scene.stop(this.scene.key);
     }
 
+    // Honestly, I know this sets the GameState Difficulty and updates button textures...
+    // But unclear on how. fucking chatGPT
+    updateDifficultyUiButtons() {
+        ['easy', 'hard'].forEach(key => {
+            const btn = this.buttons[key];
+            if (btn) {
+                const active = key === GameState.currentDifficulty;
+                btn.setEnabled(!active);
+            }
+        });
+    }
+
+    // This will be deleted, *HOWEVER*
     createSimulationButtons() {
         const btnStyle = { fontSize: '18px', fill: '#fff', backgroundColor: '#000', padding: 10 };
 
+        // RoomManager has a checkKeyCollision Methos wich takes player pos_x and player pos_y
+        // As of now, I celebrate keyTileCollision regardless of coorinates
         this.simBtn = this.add.text(21, 14, '🗝 Simulate Key', btnStyle)
-            .setInteractive()
+            .setInteractive({ useHandCursor: true })
             .on('pointerdown', () => {
-                if (this.keyTile?.onPressed) this.keyTile.onPressed();
+                this.roomManager.checkKeyTileCollision(6, 6);
             });
 
+        this.simBtn.setDepth(42);
+
+        // Room Manager handles changing rooms. So use this when machango leaves a door (if possible)
+        // Player can go back in world_2 (as an error), but not in world 1
         this.nextBtn = this.add.text(400, 14, '➡️ Next Room', btnStyle)
-            .setInteractive()
+            .setInteractive({ useHandCursor: true })
             .on('pointerdown', () => {
-                this.roomManager.switchToRoom('world_1_room_2');
+                if (GameState.keyCollected) {
+                    this.roomManager.goToNextRoom();
+                } else {
+                    console.log('collect key first');
+                }
+
             });
+
+        this.nextBtn.setDepth(42);
     }
 }

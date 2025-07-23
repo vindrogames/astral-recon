@@ -49,66 +49,6 @@ export class World_2 extends Scene {
         var layer = map.createLayer('layer', tileset, 0, 0);
 
         
-        const HOME_BTN = this.add.image(64 * 4.5 + 32, 576 - 28, 'world_2_quit').setInteractive({ useHandCursor: true });
-
-        HOME_BTN.on('pointerover', () => {
-
-            HOME_BTN.setTexture('world_2_quit_hover');
-        });
-
-        HOME_BTN.on('pointerout', () => {
-
-            HOME_BTN.setTexture('world_2_quit');
-        });
-
-        HOME_BTN.on('pointerdown', () => {
-
-            this.scene.start('StartScene');
-            this.scene.stop('world_2');
-        });
-
-        if (this.mode === 'hard') {
-
-            console.log('Hard mode on');
-            const HARD_MODE_BTN = this.add.image(64 * 1.5 + 32, 576 - 28, 'world_2_hard_on').setInteractive({ useHandCursor: false });
-            const EASY_MODE_BTN = this.add.image(64 * 2.5 + 32, 576 - 28, 'world_2_easy_off').setInteractive({ useHandCursor: true });
-
-            EASY_MODE_BTN.on('pointerover', () => {
-
-                EASY_MODE_BTN.setTexture('world_2_easy_on');
-            })
-
-            EASY_MODE_BTN.on('pointerout', () => {
-
-                EASY_MODE_BTN.setTexture('world_2_easy_off');
-            });
-
-            EASY_MODE_BTN.on('pointerdown', () => {
-
-                this.scene.restart({mode: 'easy'});
-            });
-        } else if (this.mode === 'easy') {
-
-            console.log('easy mode on');
-            const HARD_MODE_BTN = this.add.image(64 * 1.5 + 32, 576 - 28, 'world_2_hard_off').setInteractive({ useHandCursor: true });
-            const EASY_MODE_BTN = this.add.image(64 * 2.5 + 32, 576 - 28, 'world_2_easy_on').setInteractive({ useHandCursor: false });
-
-            HARD_MODE_BTN.on('pointerover', () => {
-
-                HARD_MODE_BTN.setTexture('world_2_hard_on');
-            })
-
-            HARD_MODE_BTN.on('pointerout', () => {
-
-                HARD_MODE_BTN.setTexture('world_2_hard_off');
-            });
-
-            HARD_MODE_BTN.on('pointerdown', () => {
-
-                this.scene.restart({mode: 'hard'});
-            });
-        }
-        
         this.player = new Player(
             this,
             this.player_x,

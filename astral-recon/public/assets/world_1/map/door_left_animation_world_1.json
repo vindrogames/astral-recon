@@ -66,8 +66,8 @@
         "version": "1.0",
         "author": "Vindrogames",
         "created": "2025-07-17",
-        "description": "Top Door open animation used in Astral Recon World 1.",
-        "image": "door_top_animation.png",
+        "description": "Left Door open animation used in Astral Recon World 1.",
+        "image": "door_left_animation_world_1.png",
         "format": "RGBA8888",
         "size": {
             "w": 384,
@@ -83,7 +83,8 @@
         "tags": [
             "animation",
             "astral-recon",
-            "top-door-open"
+            "left-door-open",
+            "world_1"
         ],
         "license": "All Rights Reserved"
     }

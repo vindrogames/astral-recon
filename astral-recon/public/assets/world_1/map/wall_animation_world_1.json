@@ -1,6 +1,6 @@
 {
     "frames": {
-        "door_0000": {
+        "wall_animation_0000": {
             "frame": {
                 "x": 0,
                 "y": 0,
@@ -10,7 +10,7 @@
             "rotated": false,
             "trimmed": false
         },
-        "door_0001": {
+        "wall_animation_0001": {
             "frame": {
                 "x": 64,
                 "y": 0,
@@ -20,40 +20,40 @@
             "rotated": false,
             "trimmed": false
         },
-        "door_0002": {
+        "wall_animation_0002": {
             "frame": {
-                "x": 0,
-                "y": 64,
+                "x": 128,
+                "y": 0,
                 "w": 64,
                 "h": 64
             },
             "rotated": false,
             "trimmed": false
         },
-        "door_0003": {
+        "wall_animation_0003": {
             "frame": {
-                "x": 64,
-                "y": 64,
+                "x": 192,
+                "y": 0,
                 "w": 64,
                 "h": 64
             },
             "rotated": false,
             "trimmed": false
         },
-        "door_0004": {
+        "wall_animation_0004": {
             "frame": {
-                "x": 0,
-                "y": 128,
+                "x": 256,
+                "y": 0,
                 "w": 64,
                 "h": 64
             },
             "rotated": false,
             "trimmed": false
         },
-        "door_0005": {
+        "wall_animation_0005": {
             "frame": {
-                "x": 64,
-                "y": 128,
+                "x": 320,
+                "y": 0,
                 "w": 64,
                 "h": 64
             },
@@ -66,12 +66,12 @@
         "version": "1.0",
         "author": "Vindrogames",
         "created": "2025-07-17",
-        "description": "Left Door open animation used in Astral Recon World 1.",
-        "image": "door_left_animation.png",
+        "description": "wall animation used in Astral Recon World 1 hard mode",
+        "image": "wall_animation_world_1.png",
         "format": "RGBA8888",
         "size": {
             "w": 384,
-            "h": 256
+            "h": 64
         },
         "scale": "1",
         "frameCount": 6,
@@ -79,11 +79,13 @@
             "w": 64,
             "h": 64
         },
-        "loop": false,
+        "loop": true,
+        "animationSpeed": 0.083,
         "tags": [
+            "wall",
             "animation",
-            "astral-recon",
-            "left-door-open"
+            "world_1",
+            "astral-recon"
         ],
         "license": "All Rights Reserved"
     }

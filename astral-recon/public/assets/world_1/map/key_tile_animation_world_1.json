@@ -306,8 +306,8 @@
         "version": "1.0",
         "author": "Vindrogames",
         "created": "2025-07-17",
-        "description": "Animated key tile used in Astral Recon World 2.",
-        "image": "key_tile_animation.png",
+        "description": "Animated key tile used in Astral Recon World 1.",
+        "image": "key_tile_animation_world_1.png",
         "format": "RGBA8888",
         "size": {
             "w": 384,
@@ -325,6 +325,7 @@
             "key",
             "tile",
             "animation",
+            "world_1",
             "astral-recon"
         ],
         "license": "All Rights Reserved"

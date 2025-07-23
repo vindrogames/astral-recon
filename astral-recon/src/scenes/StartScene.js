@@ -1,32 +1,46 @@
 import GameState from '../managers/GameState.js';
+import Start_scene_config from '../configs/Start_scene_config.js';
+import GameButton from '../gameobjects/GameButton.js';
 import World_1_Config from '../configs/World_1_config.js';
 import World_2_Config from '../configs/World_2_config.js';
 
-const WORLD_1_BTN_X = 64 * 2 + 32;
-const WORLD_1_BTN_Y = 64 * 6 + 32;
-
-const WORLD_2_BTN_X = 64 * 6 + 32;
-const WORLD_2_BTN_Y = 64 * 6 + 32;
-
-const tupac_complete_X = 576 / 2 - 126;
-const tupac_complete_Y = 576 / 2;
-
-const question_mark_animation_x = 576 / 2; 576 / 2;
-const question_mark_animation_Y = 576 / 2;
-
 export default class StartScene_2 extends Phaser.Scene {
     constructor() {
-        super('StartScene');
+
+        // Uses key from Start_scene_config
+        super({ key: Start_scene_config.key });
     }
 
     init() {
+        // Short faed in animmation effect when game loads
         this.cameras.main.fadeIn(1000, 0, 0, 0);
     }
 
     create() {
 
+        // Background image is simply dark background and title of game
         this.add.image(this.scale.width / 2, this.scale.height / 2, "background").setDepth(0);
 
+        // Buttons for Start Scene to start World.js scene with each corresponding world_config
+        // Buttons will be removed after a world is complete
+        this.buttons = {};
+
+        // Iterates over buttons in Start_scene_config. Can scale to as many worlds as we want
+        Start_scene_config.uiButtons.forEach(btnConfig => {
+            const button = new GameButton(
+                this,
+                btnConfig.pos_X,
+                btnConfig.pos_Y,
+                btnConfig.worldBtnDark,
+                btnConfig.worldBtnLight,
+                () => this.handleButtonPress(btnConfig.button)
+            );
+
+            this.buttons[btnConfig.button] = button;
+        });
+
+        // Creates animation sprite with questionmarks only if not already created
+        // Depth is important as astro imgs will be placed on top when world is complete
         if (!this.anims.exists('worlds_recon_animation')) {
             this.anims.create({
                 key: 'worlds_recon_animation',
@@ -41,37 +55,49 @@ export default class StartScene_2 extends Phaser.Scene {
             });
         }
 
-        const unknown_worlds_animation = this.add.sprite(question_mark_animation_x, question_mark_animation_Y, 'worlds_recon_animation').setDepth(1);
-        unknown_worlds_animation.play('worlds_recon_animation');
+        // Adds sprite animation to Start Screen and plays Sprite
+        const unknown_worlds_animation = this.add.sprite(
+            Start_scene_config.uiAnimationPos_X,
+            Start_scene_config.uiAnimationPos_Y,
+            Start_scene_config.uiAnimationKey
+        ).setDepth(1);
 
-        const isWorld1Complete = GameState.isWorldComplete(1);
-        const isWorld2Complete = GameState.isWorldComplete(2);
+        unknown_worlds_animation.play(Start_scene_config.uiAnimationKey);
 
-        if (isWorld1Complete) {
+        GameState.completedWorlds && Object.entries(GameState.completedWorlds).forEach(([worldKey, isComplete]) => {
+            if (isComplete) {
+                const asset = Start_scene_config.uiAstros[worldKey];
+                if (asset) {
+                    this.add.image(asset.pos_X, asset.pos_Y, asset.imgKey).setDepth(84);
 
-            this.add.image(tupac_complete_X, tupac_complete_Y, 'tupac_complete').setDepth(2);
-        } else {
+                    // Optional: disable or remove mission button for completed world
+                    console.log(this.buttons);
+                    const button = this.buttons[`${worldKey}_btn`];
+                    if (button) {
+                        button.setVisible(false);
+                        button.destroy(); // or button.destroy();
+                    }
+                }
+            }
+        });
+    }
 
-            const BTN_WORLD_1 = this.add.image(WORLD_1_BTN_X, WORLD_1_BTN_Y, 'world_1_button').setInteractive({ useHandCursor: true });
-
-            BTN_WORLD_1.on('pointerdown', () => {
-
-                console.log('Starting World 1');
-                this.scene.start('World', World_1_Config);
-            });
-        }
-
-        if (isWorld2Complete) {
-            this.add.image(520, 400, 'character_world_2');
-        } else {
-
-            const BTN_WORLD_2 = this.add.image(WORLD_2_BTN_X, WORLD_2_BTN_Y, 'world_2_button').setInteractive({ useHandCursor: true });
-
-            BTN_WORLD_2.on('pointerdown', () => {
-
-                console.log('Starting World 1');
-                this.scene.start('World', World_2_Config);
-            });
+    // When a world button is clicked, players will ALWYAS start in room 1 (resets GameState room).
+    // World.js scene starts with corresponding world_config (Sets GameState world)
+    handleButtonPress(buttonKey) {
+        switch (buttonKey) {
+            case 'world_1_btn':
+                GameState.setWorld('world_1');
+                GameState.currentRoomIndex = 0;
+                this.scene.start('World', { ...World_1_Config });
+                break;
+            case 'world_2_btn':
+                GameState.setWorld('world_2');
+                GameState.currentRoomIndex = 0;
+                this.scene.start('World', { ...World_2_Config });
+                break;
+            default:
+                console.warn(`No handler for button: ${buttonKey}`);
         }
     }
 }
