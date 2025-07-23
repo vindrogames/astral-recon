@@ -56,6 +56,10 @@ export default {
                 assetKey: 'door_top_closed_placeholder_world_2',
                 assetPath: 'map/door_top_closed_placeholder_world_2.png'
             },
+            {
+                assetKey: 'door_right_closed_placeholder_world_2',
+                assetPath: 'map/door_right_closed_placeholder_world_2.png'
+            },
         ],
         atlases: [
             {
@@ -67,6 +71,11 @@ export default {
                 assetKey: 'door_top_animation_world_2',
                 assetPath: 'map/door_top_animation_world_2.png',
                 atlasPath: 'map/door_top_animation_world_2.json'
+            },
+            {
+                assetKey: 'door_right_animation_world_2',
+                assetPath: 'map/door_right_animation_world_2.png',
+                atlasPath: 'map/door_right_animation_world_2.json'
             },
         ]
     },
@@ -131,61 +140,62 @@ export default {
             }
         },
         {
-            csv: 'world_1_room_2',
+            csv: 'world_2_room_2',
             playerStart: {
                 x: 64,
                 y: 64
             },
             keyTile: {
-                x: ((64 * 2) + 32),
-                y: ((64 * 7) + 32),
-                animation: 'key_tile_animation_world_2',
-                asset: 'key_tile_animation_world_2'
+                // tileSize * pos [0-8] -> 0=left edge, 8=right egde +32 to center in tile
+                pos_X: Game_config.tileSize * Game_config.col_6 + Game_config.centerTile,
+                pos_Y: Game_config.tileSize * Game_config.col_2 + Game_config.centerTile,
+                atlasKey: 'key_tile_animation_world_2',
+                animationKey: 'key_tile_animation_world_2',
+                prefix: 'keyTile_',
+                end: 11,
+                zeroPad: 4,
+                repeat: -1,
+                frameRate: 12,
+                pressedKey: 'key_tile_pressed_world_2'
             },
-            entryDoor: {
-                x: ((64 * 8) + 32),
-                y: ((64 * 5) + 32),
-                atlasKey: 'door_left_animation',
-                animKey: 'door_left_close',
-                prefix: 'door_'
-            },
-            endRoom: {
-                x: 320,
-                y: 64,
-                atlasKey: 'door_top_animation',
-                prefix: 'door_'
-            },
+            exitDoorAnimation: {
+                pos_X: Game_config.tileSize * Game_config.col_9 + Game_config.centerTile,
+                pos_Y: Game_config.tileSize * Game_config.row_7 + Game_config.centerTile,
+                atlasKey: 'door_right_animation_world_2',
+                animationKey: 'door_right_animation_world_2',
+                prefix: 'door_',
+                start: 0,
+                end: 5,
+                zeroPad: 4,
+                repeat: 0,
+                frameRate: 6,
+                closedDoorPlaceholder: 'door_right_closed_placeholder_world_2'
+            }
         },
         {
-            csv: 'world_1_room_3',
+            csv: 'world_2_room_3',
             playerStart: {
                 x: 64,
                 y: 64
             },
             keyTile: {
-                x: ((64 * 5) + 32),
-                y: ((64 * 2) + 32),
-                animation: 'key_tile_animation_world_2',
-                asset: 'key_tile_animation_world_2'
-            },
-            entryDoor: {
-                x: ((64 * 8) + 32),
-                y: ((64 * 5) + 32),
-                atlasKey: 'door_top_animation',
-                animKey: 'door_top_close',
-                prefix: 'door_'
+                // tileSize * pos [0-8] -> 0=left edge, 8=right egde +32 to center in tile
+                pos_X: Game_config.tileSize * Game_config.col_5 + Game_config.centerTile,
+                pos_Y: Game_config.tileSize * Game_config.col_2 + Game_config.centerTile,
+                atlasKey: 'key_tile_animation_world_2',
+                animationKey: 'key_tile_animation_world_2',
+                prefix: 'keyTile_',
+                end: 11,
+                zeroPad: 4,
+                repeat: -1,
+                frameRate: 12,
+                pressedKey: 'key_tile_pressed_world_2'
             },
             cagedAstroAnimation: {
                 x: ((64 * 8) + 32),
                 y: ((64 * 5) + 32),
                 atlasKey: 'tupac_caged_animation',
                 prefix: 'tupac_caged_'
-            },
-            endRoom: {
-                x: 320,
-                y: 64,
-                atlasKey: 'tupac_reveal_animation',
-                prefix: 'tupac_reveal_'
             },
         },
     ],
