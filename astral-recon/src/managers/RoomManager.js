@@ -63,19 +63,20 @@ export default class RoomManager {
     }
 
     handleRoomEntryAnimations(roomConfig) {
-        // Optional closed door placeholder for exit door
+        // Optional closed door placeholder for exit door (world_2)
+        // Adds placeholder to be destroyed when exit door animation runs, then added to cleanup
         if (roomConfig.exitDoorAnimation?.closedDoorPlaceholder) {
             const cfg = roomConfig.exitDoorAnimation;
             this.scene.closedDoorPlaceholder = this.scene.add.image(cfg.pos_X, cfg.pos_Y, cfg.closedDoorPlaceholder).setDepth(42);
             this.scene.cleanupObjects.push(this.scene.closedDoorPlaceholder);
         }
 
-        // Optional entry door animation (reversed)
+        // Optional entry door animation (reversed) only in world 1
         if (roomConfig.entryDoorAnimation) {
             this.triggerDoorAnimation(this.roomConfig.entryDoorAnimation, 'entry');
         }
 
-        // Optional entry Astro caged animation
+        // Optional entry Astro caged animation only for rooms 3
         if (roomConfig.entryAstroCaged) {
             this.spawnAstroCaged(roomConfig.entryAstroCaged);
         }
@@ -88,23 +89,26 @@ export default class RoomManager {
             obj.destroy()
         });
 
+        // eliminates any residue
         this.scene.cleanupObjects = [];
         this.scene.layer = null;
         this.scene.map = null;
         this.scene.keyTile = null;
         this.scene.pressedKeyTile = null;
         this.scene.staticOpenDoor = null;
+        this.scene.closedDoorPlaceholder = null;
         this.scene.cagedAstro = null;
     }
 
     checkKeyTileCollision(playerX, playerY) {
         const tile = this.scene.map.getTileAtWorldXY(playerX, playerY);
 
-        // 1 is key tile placeholder index in csv map
+        // '1' is key tile placeholder index in csv map
         if (tile?.index === 1 && this.scene.keyTile && !GameState.keyCollected) {
             this.pressKeyTile(); // Delegate to KeyTile
         }
 
+        // This function will go inside the conditional once we have player
         this.pressKeyTile();
         console.log(GameState.currentRoomIndex);
 
@@ -121,22 +125,22 @@ export default class RoomManager {
 
     pressKeyTile() {
         console.log('Key tile collected!');
+        // Sets GAmeState key collected for protection when exiting room
         GameState.setKeyCollected(true);
-
-        if (this.scene.pressedKeyTile) {
-            this.scene.pressedKeyTile.destroy();
-        }
 
         const cfg = this.roomConfig.keyTile;
 
+        // Adds pressed keyTile image on top of floor tile placeholder
         this.scene.pressedKeyTile = this.scene.add.image(
             cfg.pos_X,
             cfg.pos_Y,
             cfg.pressedKey ?? 0
         ).setDepth(42);
 
+        // pushes pressedKeyTile to be destroyed on cleanup when changinng rooms
         this.scene.cleanupObjects.push(this.scene.pressedKeyTile);
 
+        // Destroys keyTile animation
         if (this.scene.keyTile) {
             this.scene.keyTile.destroy();
             this.scene.keyTile = null;
@@ -222,19 +226,19 @@ export default class RoomManager {
         }
 
         // Adds sprite animation to Start Screen and plays Sprite
-        this.tupaceRevealed = this.scene.add.sprite(
+        this.astroRevealed = this.scene.add.sprite(
             astroRevealCnfg.pos_X,
             astroRevealCnfg.pos_Y,
             astroRevealCnfg.animationKey
         ).setDepth(1);
 
-        this.scene.cleanupObjects.push(this.tupaceRevealed);
-        this.tupaceRevealed.play(astroRevealCnfg.animationKey);
-        this.scene.cleanupObjects.push(this.tupacCaged);
-        this.tupacCaged.destroy();
+        this.scene.cleanupObjects.push(this.astroRevealed);
+        this.astroRevealed.play(astroRevealCnfg.animationKey);
+        this.scene.cleanupObjects.push(this.astroRevealed);
+        this.spawnedAstroCaged.destroy();
 
 
-        this.tupaceRevealed.on('animationcomplete', () => {
+        this.astroRevealed.on('animationcomplete', () => {
 
             const endDialogueCnfg = this.roomConfig.endDialogue;
             if (!this.scene.anims.exists(endDialogueCnfg.animationKey)) {
@@ -265,7 +269,7 @@ export default class RoomManager {
                 this.scene.cameras.main.fadeOut(1000, 0, 0, 0);
 
                 this.endDialogue.destroy();
-                this.tupaceRevealed.destroy()
+                this.astroRevealed.destroy()
                 this.scene.cameras.main.once('camerafadeoutcomplete', () => {
                     this.scene.quitWorld(); // or delegate to RoomManager if needed
                 });
