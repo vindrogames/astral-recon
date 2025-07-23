@@ -1,3 +1,4 @@
+import Game_config from "./Game_config";
 
 export default {
     key: 'world_2',
@@ -51,12 +52,21 @@ export default {
                 assetKey: 'key_tile_pressed_world_2',
                 assetPath: 'map/key_tile_pressed_world_2.png'
             },
+            {
+                assetKey: 'door_top_closed_placeholder_world_2',
+                assetPath: 'map/door_top_closed_placeholder_world_2.png'
+            },
         ],
         atlases: [
             {
                 assetKey: 'key_tile_animation_world_2',
                 assetPath: 'map/key_tile_animation_world_2.png',
                 atlasPath: 'map/key_tile_animation_world_2.json'
+            },
+            {
+                assetKey: 'door_top_animation_world_2',
+                assetPath: 'map/door_top_animation_world_2.png',
+                atlasPath: 'map/door_top_animation_world_2.json'
             },
         ]
     },
@@ -106,12 +116,19 @@ export default {
                 frameRate: 12,
                 pressedKey: 'key_tile_pressed_world_2'
             },
-            endRoom: {
-                x: ((64 * 5) + 32),
-                y: ((64 * 0) + 32),
-                atlasKey: 'door_top_animation',
-                prefix: 'door_'
-            },
+            exitDoorAnimation: {
+                pos_X: Game_config.tileSize * Game_config.col_6 + Game_config.centerTile,
+                pos_Y: Game_config.tileSize * Game_config.row_1 + Game_config.centerTile,
+                atlasKey: 'door_top_animation_world_2',
+                animationKey: 'door_top_animation_world_2',
+                prefix: 'door_',
+                start: 0,
+                end: 5,
+                zeroPad: 4,
+                repeat: 0,
+                frameRate: 6,
+                closedDoorPlaceholder: 'door_top_closed_placeholder_world_2'
+            }
         },
         {
             csv: 'world_1_room_2',

@@ -27,7 +27,18 @@ export default class RoomManager {
         this.cleanupPreviousRoom();
         this.roomConfig = roomConfig;
 
-        // 1. Load tilemap
+        // Load tilemap with RoomManager Method
+        this.loadTileMap(this.roomConfig);
+
+        // Handle any room entry animations (closing doors for world 1 and caged astro animations for rooms 3 in all worlds)
+        this.handleRoomEntryAnimations(this.roomConfig);
+
+        // Creeate and manage room keyTile
+        this.setupKeyTile(this.roomConfig);
+    }
+
+    loadTileMap(roomConfig) {
+
         const map = this.scene.make.tilemap({
             key: roomConfig.csv,
             tileWidth: 64,
@@ -40,51 +51,33 @@ export default class RoomManager {
         this.scene.map = map;
         this.scene.layer = layer;
         this.scene.cleanupObjects.push(map, layer);
+    }
 
-        // Conditionals to play roomEntry animations (doors only valid for world 1, caged Astro fro both)
-        // Revisit when moving on to world_2
-        if (roomIndex === 1) {
+    setupKeyTile(roomConfig) {
+        if (!roomConfig.keyTile) return;
 
-            this.scene.closeDoorAnimation = new Door(this.scene, roomConfig.entryDoorAnimation, true);
-            this.scene.cleanupObjects.push(this.scene.closeDoorAnimation);
-        } else if (roomIndex === 2) {
+        const keyTile = new KeyTile(this.scene, roomConfig.keyTile);
+        this.scene.keyTile = keyTile;
+        this.scene.cleanupObjects.push(keyTile);
+        keyTile.playAnimation?.();
+    }
 
-            // Creates and adds sprite animation for astro caged.
-            // No class for this as it only happens once per world
-            if (!this.scene.anims.exists(roomConfig.entryAstroCaged.animationKey)) {
-                this.scene.anims.create({
-                    key: roomConfig.entryAstroCaged.animationKey,
-                    frames: this.scene.anims.generateFrameNames(roomConfig.entryAstroCaged.atlasKey, {
-                        prefix: roomConfig.entryAstroCaged.prefix,  // <-- adjust this prefix to match your JSON keys
-                        start: roomConfig.entryAstroCaged.start,
-                        end: roomConfig.entryAstroCaged.end,
-                        zeroPad: roomConfig.entryAstroCaged.zeroPad
-                    }),
-                    frameRate: roomConfig.entryAstroCaged.frameRate,
-                    repeat: -roomConfig.entryAstroCaged.repeat
-                });
-            }
-
-            // Adds sprite animation to Start Screen and plays Sprite
-            this.tupacCaged = this.scene.add.sprite(
-                roomConfig.entryAstroCaged.pos_X,
-                roomConfig.entryAstroCaged.pos_Y,
-                roomConfig.entryAstroCaged.animationKey
-            ).setDepth(1);
-
-            this.scene.cleanupObjects.push(this.tupacCaged);
-            this.tupacCaged.play(roomConfig.entryAstroCaged.animationKey);
-
-            // Creates Door Animation for room 3 door close on entry, adds sprite to object cleanup
-            this.scene.closeDoorAnimation = new Door(this.scene, roomConfig.entryDoorAnimation, true);
-            this.scene.cleanupObjects.push(this.scene.closeDoorAnimation);
+    handleRoomEntryAnimations(roomConfig) {
+        // Optional closed door placeholder for exit door
+        if (roomConfig.exitDoorAnimation?.closedDoorPlaceholder) {
+            const cfg = roomConfig.exitDoorAnimation;
+            this.scene.closedDoorPlaceholder = this.scene.add.image(cfg.pos_X, cfg.pos_Y, cfg.closedDoorPlaceholder).setDepth(42);
+            this.scene.cleanupObjects.push(this.scene.closedDoorPlaceholder);
         }
 
-        // 3. Key tile setup
-        if (roomConfig.keyTile) {
-            this.scene.keyTile = new KeyTile(this.scene, roomConfig.keyTile);
-            this.scene.cleanupObjects.push(this.scene.keyTile);
-            this.scene.keyTile.playAnimation?.();
+        // Optional entry door animation (reversed)
+        if (roomConfig.entryDoorAnimation) {
+            this.triggerDoorAnimation(this.roomConfig.entryDoorAnimation, 'entry');
+        }
+
+        // Optional entry Astro caged animation
+        if (roomConfig.entryAstroCaged) {
+            this.spawnAstroCaged(roomConfig.entryAstroCaged);
         }
     }
 
@@ -109,23 +102,74 @@ export default class RoomManager {
 
         // 1 is key tile placeholder index in csv map
         if (tile?.index === 1 && this.scene.keyTile && !GameState.keyCollected) {
-            this.scene.keyTile.onPressed(); // Delegate to KeyTile
+            this.pressKeyTile(); // Delegate to KeyTile
         }
 
-        this.scene.keyTile.onPressed();
+        this.pressKeyTile();
         console.log(GameState.currentRoomIndex);
 
         // This if statement should go in collision IF when player is added
         if (GameState.currentRoomIndex === 0 || GameState.currentRoomIndex === 1) {
 
-            console.log(GameState.currentRoomIndex);
-            this.scene.openDoorAnimation = new Door(this.scene, this.roomConfig.exitDoorAnimation, false);
-            this.scene.cleanupObjects.push(this.scene.openDoorAnimation);
+            console.log(this.roomConfig.exitDoorAnimation);
+            this.triggerDoorAnimation(this.roomConfig.exitDoorAnimation, 'exit');
         } else {
             console.log('last room');
             this.endWorldSequence();
         }
+    }
 
+    pressKeyTile() {
+        console.log('Key tile collected!');
+        GameState.setKeyCollected(true);
+
+        if (this.scene.pressedKeyTile) {
+            this.scene.pressedKeyTile.destroy();
+        }
+
+        const cfg = this.roomConfig.keyTile;
+
+        this.scene.pressedKeyTile = this.scene.add.image(
+            cfg.pos_X,
+            cfg.pos_Y,
+            cfg.pressedKey ?? 0
+        ).setDepth(42);
+
+        this.scene.cleanupObjects.push(this.scene.pressedKeyTile);
+
+        if (this.scene.keyTile) {
+            this.scene.keyTile.destroy();
+            this.scene.keyTile = null;
+        }
+    }
+
+    triggerDoorAnimation(cfg, type = 'exit') {
+        // Reverse is true when type is 'entry'
+        const reverse = type === 'entry';
+
+        console.log(cfg);
+        // For exit doors: destroy the wall blocking the exit
+        if (type === 'exit' && this.scene.closedDoorPlaceholder) {
+            this.scene.closedDoorPlaceholder.destroy();
+            this.scene.closedDoorPlaceholder = null;
+        }
+
+        const door = new Door(this.scene, cfg, reverse);
+        this.scene.cleanupObjects.push(door);
+
+        door.playOpenAnimation(() => {
+            if (type === 'exit' && cfg.staticOpenDoor) {
+                const openDoor = this.scene.add.image(door.x, door.y, cfg.staticOpenDoor).setDepth(42);
+                this.scene.cleanupObjects.push(openDoor);
+            }
+
+            if (type === 'entry' && this.scene.staticOpenDoor) {
+                this.scene.staticOpenDoor.destroy();
+                this.scene.staticOpenDoor = null;
+            }
+
+            door.destroy();
+        });
     }
 
     goToNextRoom() {
@@ -133,8 +177,29 @@ export default class RoomManager {
         this.loadCurrentRoom();
     }
 
+    // Don't use this at the moment, and not clear we will, perhaps in world_2
     reloadRoom() {
         this.loadCurrentRoom();
+    }
+
+    spawnAstroCaged(config) {
+        if (!this.scene.anims.exists(config.animationKey)) {
+            this.scene.anims.create({
+                key: config.animationKey,
+                frames: this.scene.anims.generateFrameNames(config.atlasKey, {
+                    prefix: config.prefix,
+                    start: config.start,
+                    end: config.end,
+                    zeroPad: config.zeroPad
+                }),
+                frameRate: config.frameRate,
+                repeat: -config.repeat
+            });
+        }
+
+        this.spawnedAstroCaged = this.scene.add.sprite(config.pos_X, config.pos_Y, config.animationKey).setDepth(1);
+        this.scene.cleanupObjects.push(this.spawnedAstroCaged);
+        this.spawnedAstroCaged.play(config.animationKey);
     }
 
     endWorldSequence() {

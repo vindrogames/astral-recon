@@ -53,20 +53,10 @@ export default class Door extends GameObjects.Sprite {
 
             this.setFlipY(true);
         }
+    }
 
-        // Play animation and on completion, add open static door image no top for visual effect
-        // On csv map, the tile is still a door, simply with a placeholder wall in it's position with open door tile on top
+    playOpenAnimation(onComplete) {
         this.play(this.config.animationKey);
-        this.on('animationcomplete', () => {
-            if (this.config.staticOpenDoor) {
-                this.scene.staticOpenDoor = this.scene.add.image(this.x, this.y, this.config.staticOpenDoor)
-                    .setDepth(42);
-
-                // Push open static door image to cleanup objects when cleaning previous room   
-                this.scene.cleanupObjects.push(this.scene.staticOpenDoor);
-            }
-            // destroy animation, although it will be pushed to cleanup objects as well
-            this.destroy();
-        });
+        this.once('animationcomplete', onComplete);
     }
 }

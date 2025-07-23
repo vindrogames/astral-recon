@@ -39,29 +39,4 @@ export default class KeyTile extends GameObjects.Sprite {
     playAnimation() {
         this.play(this.config.animationKey, true);
     }
-
-    onPressed() {
-        console.log('Key tile pressed');
-        GameState.setKeyCollected(true);
-        
-
-        if (!this.scene) {
-            console.error('KeyTile.onPressed(): scene is undefined');
-            return;
-        }
-
-        try {
-            this.scene.pressedKeyTile = this.scene.add.image(
-                this.config.pos_X,
-                this.config.pos_Y,
-                this.config.pressedKey ?? 0
-            ).setDepth(42);
-
-            this.scene.cleanupObjects.push(this.scene.pressedKeyTile);
-        } catch (e) {
-            console.error('Failed to create pressed key image:', e);
-        }
-        this.destroy();
-    }
-
 }

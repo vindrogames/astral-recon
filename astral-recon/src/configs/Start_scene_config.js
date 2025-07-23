@@ -25,7 +25,7 @@ export default {
     uiAstros: {
         world_1: {
             imgKey: 'tupac_complete',
-            pos_X: 576 / 2 - 126,
+            pos_X: (Game_config.gameWidth / 2) - (Game_config.tileSize * 2),
             pos_Y: Game_config.gameWidth / 2,
         },
         world_2: {
