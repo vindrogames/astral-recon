@@ -197,7 +197,7 @@ export default class RoomManager {
                     zeroPad: config.zeroPad
                 }),
                 frameRate: config.frameRate,
-                repeat: -config.repeat
+                repeat: config.repeat
             });
         }
 
@@ -240,40 +240,43 @@ export default class RoomManager {
 
         this.astroRevealed.on('animationcomplete', () => {
 
-            const endDialogueCnfg = this.roomConfig.endDialogue;
-            if (!this.scene.anims.exists(endDialogueCnfg.animationKey)) {
-                this.scene.anims.create({
-                    key: endDialogueCnfg.animationKey,
-                    frames: this.scene.anims.generateFrameNames(endDialogueCnfg.atlasKey, {
-                        prefix: endDialogueCnfg.prefix,  // <-- adjust this prefix to match your JSON keys
-                        start: endDialogueCnfg.start,
-                        end: endDialogueCnfg.end,
-                        zeroPad: endDialogueCnfg.zeroPad
-                    }),
-                    duration: endDialogueCnfg.duration,
-                    repeat: endDialogueCnfg.repeat
+            if (this.roomConfig.endDialogue) {
+
+                const endDialogueCnfg = this.roomConfig.endDialogue;
+                if (!this.scene.anims.exists(endDialogueCnfg.animationKey)) {
+                    this.scene.anims.create({
+                        key: endDialogueCnfg.animationKey,
+                        frames: this.scene.anims.generateFrameNames(endDialogueCnfg.atlasKey, {
+                            prefix: endDialogueCnfg.prefix,  // <-- adjust this prefix to match your JSON keys
+                            start: endDialogueCnfg.start,
+                            end: endDialogueCnfg.end,
+                            zeroPad: endDialogueCnfg.zeroPad
+                        }),
+                        duration: endDialogueCnfg.duration,
+                        repeat: endDialogueCnfg.repeat
+                    });
+                }
+
+                // Adds sprite animation to Start Screen and plays Sprite
+                this.endDialogue = this.scene.add.sprite(
+                    endDialogueCnfg.pos_X,
+                    endDialogueCnfg.pos_Y,
+                    endDialogueCnfg.animationKey
+                ).setDepth(84);
+
+                this.scene.cleanupObjects.push(this.endDialogue);
+                this.endDialogue.play(endDialogueCnfg.animationKey);
+
+                this.endDialogue.on('animationcomplete', () => {
+                    this.scene.cameras.main.fadeOut(1000, 0, 0, 0);
+
+                    this.endDialogue.destroy();
+                    this.astroRevealed.destroy()
+                    this.scene.cameras.main.once('camerafadeoutcomplete', () => {
+                        this.scene.quitWorld(); // or delegate to RoomManager if needed
+                    });
                 });
             }
-
-            // Adds sprite animation to Start Screen and plays Sprite
-            this.endDialogue = this.scene.add.sprite(
-                endDialogueCnfg.pos_X,
-                endDialogueCnfg.pos_Y,
-                endDialogueCnfg.animationKey
-            ).setDepth(84);
-
-            this.scene.cleanupObjects.push(this.endDialogue);
-            this.endDialogue.play(endDialogueCnfg.animationKey);
-
-            this.endDialogue.on('animationcomplete', () => {
-                this.scene.cameras.main.fadeOut(1000, 0, 0, 0);
-
-                this.endDialogue.destroy();
-                this.astroRevealed.destroy()
-                this.scene.cameras.main.once('camerafadeoutcomplete', () => {
-                    this.scene.quitWorld(); // or delegate to RoomManager if needed
-                });
-            });
         });
     }
 }

@@ -29,7 +29,9 @@ export default {
             pos_Y: Game_config.gameWidth / 2,
         },
         world_2: {
-
+            imgKey: 'elvis_complete',
+            pos_X: (Game_config.gameWidth - Game_config.tileSize) - (Game_config.tileSize * 2),
+            pos_Y: Game_config.gameWidth / 2,
         }
     },
     uiAnimationKey: 'worlds_recon_animation',

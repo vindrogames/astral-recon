@@ -77,6 +77,16 @@ export default {
                 assetPath: 'map/door_right_animation_world_2.png',
                 atlasPath: 'map/door_right_animation_world_2.json'
             },
+            {
+                assetKey: 'elvis_caged_animation',
+                assetPath: 'avatars/elvis_caged_animation.png',
+                atlasPath: 'avatars/elvis_caged_animation.json'
+            },
+            {
+                assetKey: 'elvis_reveal_animation',
+                assetPath: 'avatars/elvis_reveal_animation.png',
+                atlasPath: 'avatars/elvis_reveal_animation.json'
+            },
         ]
     },
     uiButtons: [
@@ -191,11 +201,29 @@ export default {
                 frameRate: 12,
                 pressedKey: 'key_tile_pressed_world_2'
             },
-            cagedAstroAnimation: {
-                x: ((64 * 8) + 32),
-                y: ((64 * 5) + 32),
-                atlasKey: 'tupac_caged_animation',
-                prefix: 'tupac_caged_'
+            entryAstroCaged: {
+                pos_X: Game_config.tileSize * Game_config.col_4 + Game_config.centerTile,
+                pos_Y: Game_config.tileSize * Game_config.row_2,
+                atlasKey: 'elvis_caged_animation',
+                animationKey: 'elvis_caged_animation',
+                prefix: 'elvis_caged_',
+                start: 0,
+                end: 23,
+                zeroPad: 4,
+                repeat: -1,
+                frameRate: 12,
+            },
+            astroReveal: {
+                pos_X: Game_config.tileSize * Game_config.col_4 + Game_config.centerTile,
+                pos_Y: Game_config.tileSize * Game_config.row_2,
+                atlasKey: 'elvis_reveal_animation',
+                animationKey: 'elvis_reveal_animation',
+                prefix: 'elvis_reveal_',
+                start: 0,
+                end: 11,
+                zeroPad: 4,
+                repeat: 0,
+                frameRate: 8,
             },
         },
     ],
