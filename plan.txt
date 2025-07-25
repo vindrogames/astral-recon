@@ -1,0 +1,36 @@
+We want to refractor our phaser game to have a cleaner structure. This is a recomendation from chatGpt:
+/public
+  /assets
+    /audio/
+    /player/
+      player_w1.png
+      player_w2.png
+    /start_screen/
+    /world_1/
+      map.csv
+      tileset.png
+      puzzle_elements/
+    /world_2/
+      map.csv
+      tileset.png
+      puzzle_elements/
+
+/src
+  /config/
+    World1Config.js
+    World2Config.js
+  /gameobjects/
+    PlayerW1.js
+    PlayerW2.js
+    Room.js
+    SavedCharacter.js
+  /scenes/
+    StartScene.js
+    World.js
+  /utils/
+    DifficultyHandlerHard.js
+    DifficultyHandlerEasy.js
+    EventBus.js (optional)
+
+
+Which we understand quite well, although we want to know if we should stick with importing { Game } from phaser or 'Phaser' from phaser as well as having a Preload.js scene versus managing preload as a class function for each world.

@@ -1,120 +1,120 @@
 {
     "frames": {
-        "worlds_00": {
+        "elvis_reveal_0000": {
             "frame": {
                 "x": 0,
                 "y": 0,
-                "w": 320,
+                "w": 64,
                 "h": 128
             },
             "rotated": false,
             "trimmed": false
         },
-        "worlds_01": {
-            "frame": {
-                "x": 320,
-                "y": 0,
-                "w": 320,
-                "h": 128
-            },
-            "rotated": false,
-            "trimmed": false
-        },
-        "worlds_02": {
-            "frame": {
-                "x": 640,
-                "y": 0,
-                "w": 320,
-                "h": 128
-            },
-            "rotated": false,
-            "trimmed": false
-        },
-        "worlds_03": {
+        "elvis_reveal_0001": {
             "frame": {
                 "x": 0,
                 "y": 128,
-                "w": 320,
+                "w": 64,
                 "h": 128
             },
             "rotated": false,
             "trimmed": false
         },
-        "worlds_04": {
-            "frame": {
-                "x": 320,
-                "y": 128,
-                "w": 320,
-                "h": 128
-            },
-            "rotated": false,
-            "trimmed": false
-        },
-        "worlds_05": {
-            "frame": {
-                "x": 640,
-                "y": 128,
-                "w": 320,
-                "h": 128
-            },
-            "rotated": false,
-            "trimmed": false
-        },
-        "worlds_06": {
+        "elvis_reveal_0002": {
             "frame": {
                 "x": 0,
                 "y": 256,
-                "w": 320,
+                "w": 64,
                 "h": 128
             },
             "rotated": false,
             "trimmed": false
         },
-        "worlds_07": {
-            "frame": {
-                "x": 320,
-                "y": 256,
-                "w": 320,
-                "h": 128
-            },
-            "rotated": false,
-            "trimmed": false
-        },
-        "worlds_08": {
-            "frame": {
-                "x": 640,
-                "y": 256,
-                "w": 320,
-                "h": 128
-            },
-            "rotated": false,
-            "trimmed": false
-        },
-        "worlds_09": {
+        "elvis_reveal_0003": {
             "frame": {
                 "x": 0,
                 "y": 384,
-                "w": 320,
+                "w": 64,
                 "h": 128
             },
             "rotated": false,
             "trimmed": false
         },
-        "worlds_10": {
+        "elvis_reveal_0004": {
             "frame": {
-                "x": 320,
-                "y": 384,
-                "w": 320,
+                "x": 0,
+                "y": 512,
+                "w": 64,
                 "h": 128
             },
             "rotated": false,
             "trimmed": false
         },
-        "worlds_11": {
+        "elvis_reveal_0005": {
             "frame": {
-                "x": 640,
-                "y": 384,
-                "w": 320,
+                "x": 0,
+                "y": 640,
+                "w": 64,
+                "h": 128
+            },
+            "rotated": false,
+            "trimmed": false
+        },
+        "elvis_reveal_0006": {
+            "frame": {
+                "x": 0,
+                "y": 768,
+                "w": 64,
+                "h": 128
+            },
+            "rotated": false,
+            "trimmed": false
+        },
+        "elvis_reveal_0007": {
+            "frame": {
+                "x": 0,
+                "y": 896,
+                "w": 64,
+                "h": 128
+            },
+            "rotated": false,
+            "trimmed": false
+        },
+        "elvis_reveal_0008": {
+            "frame": {
+                "x": 0,
+                "y": 1024,
+                "w": 64,
+                "h": 128
+            },
+            "rotated": false,
+            "trimmed": false
+        },
+        "elvis_reveal_0009": {
+            "frame": {
+                "x": 0,
+                "y": 1152,
+                "w": 64,
+                "h": 128
+            },
+            "rotated": false,
+            "trimmed": false
+        },
+        "elvis_reveal_0010": {
+            "frame": {
+                "x": 0,
+                "y": 1280,
+                "w": 64,
+                "h": 128
+            },
+            "rotated": false,
+            "trimmed": false
+        },
+        "elvis_reveal_0011": {
+            "frame": {
+                "x": 0,
+                "y": 1408,
+                "w": 64,
                 "h": 128
             },
             "rotated": false,
@@ -122,28 +122,30 @@
         }
     },
     "meta": {
-        "app": "Vindrogames (manual)",
+        "app": "Vindrogames (manual creation)",
         "version": "1.0",
         "author": "Vindrogames",
         "created": "2025-07-17",
-        "description": "Unknown Worlds animation used in Astral Recon Start Scene.",
-        "image": "worlds_recon_animation.png",
+        "description": "Animated sprite for final character reveal used in Astral Recon World 2.",
+        "image": "elvis_reveal_animation.png",
         "format": "RGBA8888",
         "size": {
-            "w": 960,
-            "h": 125
+            "w": 64,
+            "h": 1536
         },
         "scale": "1",
-        "frameCount": 24,
+        "frameCount": 12,
         "frameSize": {
-            "w": 320,
+            "w": 64,
             "h": 128
         },
         "loop": false,
         "tags": [
+            "key",
+            "tile",
             "animation",
             "astral-recon",
-            "Start-cene"
+            "elvis-reveal"
         ],
         "license": "All Rights Reserved"
     }

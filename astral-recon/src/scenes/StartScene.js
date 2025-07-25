@@ -1,75 +1,103 @@
-import { Scene } from "phaser";
+import GameState from '../managers/GameState.js';
+import Start_scene_config from '../configs/Start_scene_config.js';
+import GameButton from '../gameobjects/GameButton.js';
+import World_1_Config from '../configs/World_1_config.js';
+import World_2_Config from '../configs/World_2_config.js';
 
-const WORLD_1_BTN_X = 64 * 2 + 32;
-const WORLD_1_BTN_Y = 64 * 6 + 32;
-
-const WORLD_2_BTN_X = 64 * 6 + 32;
-const WORLD_2_BTN_Y = 64 * 6 + 32;
-
-export class StartScene extends Scene {
-
+export default class StartScene_2 extends Phaser.Scene {
     constructor() {
-        super("StartScene");
+
+        // Uses key from Start_scene_config
+        super({ key: Start_scene_config.key });
     }
 
-    // Se incluye params para los 3 avatares de los 3 mundos.
-    // Al finalizar cada World, pasamos el param como true al empezar el Start Scene de nuevo
-    init(params) {
+    init() {
+        // Short faed in animmation effect when game loads
         this.cameras.main.fadeIn(1000, 0, 0, 0);
-
-        this.tupac_complete = params.tupac || false;
-        this.elvis_complete = params.elvis || false;
-        this.michael_complete = params.michael || false;
     }
 
     create() {
-        this.add.image(this.scale.width / 2, this.scale.height / 2, "background").setDepth(0);
-        //const fx = logo.postFX.addShine(1, .2, 5);
 
-        this.anims.create({
-            key: 'worlds_recon_animation',
-            frames: this.anims.generateFrameNames('worlds_recon_animation', { prefix: 'worlds_', end: 11, zeroPad: 2 }),
-            repeat: -1,
-            frameRate: 8,
+        // Background image is simply dark background and title of game
+        this.add.image(this.scale.width / 2, this.scale.height / 2, "background").setDepth(0);
+
+        // Buttons for Start Scene to start World.js scene with each corresponding world_config
+        // Buttons will be removed after a world is complete
+        this.buttons = {};
+
+        // Iterates over buttons in Start_scene_config. Can scale to as many worlds as we want
+        Start_scene_config.uiButtons.forEach(btnConfig => {
+            const button = new GameButton(
+                this,
+                btnConfig.pos_X,
+                btnConfig.pos_Y,
+                btnConfig.worldBtnDark,
+                btnConfig.worldBtnLight,
+                () => this.handleButtonPress(btnConfig.button)
+            );
+
+            this.buttons[btnConfig.button] = button;
         });
 
-        var worlds = this.add.sprite(576 / 2, 576 / 2, 'worlds_recon_animation').setDepth(1);
-        var worldsAnim = worlds.play('worlds_recon_animation');
-
-        if (this.tupac_complete) {
-
-            this.add.image(576 / 2 - 126, 576 / 2, 'tupac_complete').setDepth(1);
-
-        } else if (!this.tupac_complete) {
-
-
-            const BTN_WORLD_1 = this.add.image(WORLD_1_BTN_X, WORLD_1_BTN_Y, 'world_1_button').setInteractive({ useHandCursor: true });
-
-            BTN_WORLD_1.on('pointerdown', () => {
-
-                console.log('Starting World 1');
-                this.scene.start('World_1');
-                this.scene.stop('StartScreen');
-                // this.scene.stop('Screen_start');
+        // Creates animation sprite with questionmarks only if not already created
+        // Depth is important as astro imgs will be placed on top when world is complete
+        if (!this.anims.exists('worlds_recon_animation')) {
+            this.anims.create({
+                key: 'worlds_recon_animation',
+                frames: this.anims.generateFrameNames('worlds_recon_animation', {
+                    prefix: 'worlds_',  // <-- adjust this prefix to match your JSON keys
+                    start: 0,
+                    end: 10,
+                    zeroPad: 2 // or whatever your filenames use
+                }),
+                frameRate: 6,
+                repeat: -1
             });
         }
 
-        if (this.elvis_complete) {
+        // Adds sprite animation to Start Screen and plays Sprite
+        const unknown_worlds_animation = this.add.sprite(
+            Start_scene_config.uiAnimationPos_X,
+            Start_scene_config.uiAnimationPos_Y,
+            Start_scene_config.uiAnimationKey
+        ).setDepth(1);
 
-            this.add.image(576 / 2 - 126, 576 / 2, 'tupac_complete').setDepth(1);
+        unknown_worlds_animation.play(Start_scene_config.uiAnimationKey);
 
-        } else if (!this.elvis_complete) {
+        GameState.completedWorlds && Object.entries(GameState.completedWorlds).forEach(([worldKey, isComplete]) => {
+            if (isComplete) {
+                const asset = Start_scene_config.uiAstros[worldKey];
+                if (asset) {
+                    this.add.image(asset.pos_X, asset.pos_Y, asset.imgKey).setDepth(84);
 
+                    // Optional: disable or remove mission button for completed world
+                    console.log(this.buttons);
+                    const button = this.buttons[`${worldKey}_btn`];
+                    if (button) {
+                        button.setVisible(false);
+                        button.destroy(); // or button.destroy();
+                    }
+                }
+            }
+        });
+    }
 
-            const BTN_WORLD_2 = this.add.image(WORLD_2_BTN_X, WORLD_2_BTN_Y, 'world_2_button').setInteractive({ useHandCursor: true });
-
-            BTN_WORLD_2.on('pointerdown', () => {
-
-                console.log('Starting World 2');
-                this.scene.start('World_2');
-                this.scene.stop('StartScreen');
-                // this.scene.stop('Screen_start');
-            });
+    // When a world button is clicked, players will ALWYAS start in room 1 (resets GameState room).
+    // World.js scene starts with corresponding world_config (Sets GameState world)
+    handleButtonPress(buttonKey) {
+        switch (buttonKey) {
+            case 'world_1_btn':
+                GameState.setWorld('world_1');
+                GameState.currentRoomIndex = 0;
+                this.scene.start('World', { ...World_1_Config });
+                break;
+            case 'world_2_btn':
+                GameState.setWorld('world_2');
+                GameState.currentRoomIndex = 0;
+                this.scene.start('World', { ...World_2_Config });
+                break;
+            default:
+                console.warn(`No handler for button: ${buttonKey}`);
         }
     }
 }

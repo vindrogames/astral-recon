@@ -1,6 +1,6 @@
 {
     "frames": {
-        "tupac_caged_0000": {
+        "elvis_caged_0000": {
             "frame": {
                 "x": 0,
                 "y": 0,
@@ -10,7 +10,7 @@
             "rotated": false,
             "trimmed": false
         },
-        "tupac_caged_0001": {
+        "elvis_caged_0001": {
             "frame": {
                 "x": 0,
                 "y": 128,
@@ -20,7 +20,7 @@
             "rotated": false,
             "trimmed": false
         },
-        "tupac_caged_0002": {
+        "elvis_caged_0002": {
             "frame": {
                 "x": 0,
                 "y": 256,
@@ -30,7 +30,7 @@
             "rotated": false,
             "trimmed": false
         },
-        "tupac_caged_0003": {
+        "elvis_caged_0003": {
             "frame": {
                 "x": 0,
                 "y": 384,
@@ -40,7 +40,7 @@
             "rotated": false,
             "trimmed": false
         },
-        "tupac_caged_0004": {
+        "elvis_caged_0004": {
             "frame": {
                 "x": 0,
                 "y": 512,
@@ -50,7 +50,7 @@
             "rotated": false,
             "trimmed": false
         },
-        "tupac_caged_0005": {
+        "elvis_caged_0005": {
             "frame": {
                 "x": 0,
                 "y": 640,
@@ -60,7 +60,7 @@
             "rotated": false,
             "trimmed": false
         },
-        "tupac_caged_0006": {
+        "elvis_caged_0006": {
             "frame": {
                 "x": 0,
                 "y": 768,
@@ -70,7 +70,7 @@
             "rotated": false,
             "trimmed": false
         },
-        "tupac_caged_0007": {
+        "elvis_caged_0007": {
             "frame": {
                 "x": 0,
                 "y": 896,
@@ -80,7 +80,7 @@
             "rotated": false,
             "trimmed": false
         },
-        "tupac_caged_0008": {
+        "elvis_caged_0008": {
             "frame": {
                 "x": 0,
                 "y": 1024,
@@ -90,7 +90,7 @@
             "rotated": false,
             "trimmed": false
         },
-        "tupac_caged_0009": {
+        "elvis_caged_0009": {
             "frame": {
                 "x": 0,
                 "y": 1152,
@@ -100,7 +100,7 @@
             "rotated": false,
             "trimmed": false
         },
-        "tupac_caged_0010": {
+        "elvis_caged_0010": {
             "frame": {
                 "x": 0,
                 "y": 1280,
@@ -110,7 +110,7 @@
             "rotated": false,
             "trimmed": false
         },
-        "tupac_caged_0011": {
+        "elvis_caged_0011": {
             "frame": {
                 "x": 0,
                 "y": 1408,
@@ -120,7 +120,7 @@
             "rotated": false,
             "trimmed": false
         },
-        "tupac_caged_0012": {
+        "elvis_caged_0012": {
             "frame": {
                 "x": 64,
                 "y": 0,
@@ -130,7 +130,7 @@
             "rotated": false,
             "trimmed": false
         },
-        "tupac_caged_0013": {
+        "elvis_caged_0013": {
             "frame": {
                 "x": 64,
                 "y": 128,
@@ -140,7 +140,7 @@
             "rotated": false,
             "trimmed": false
         },
-        "tupac_caged_0014": {
+        "elvis_caged_0014": {
             "frame": {
                 "x": 64,
                 "y": 256,
@@ -150,7 +150,7 @@
             "rotated": false,
             "trimmed": false
         },
-        "tupac_caged_0015": {
+        "elvis_caged_0015": {
             "frame": {
                 "x": 64,
                 "y": 384,
@@ -160,7 +160,7 @@
             "rotated": false,
             "trimmed": false
         },
-        "tupac_caged_0016": {
+        "elvis_caged_0016": {
             "frame": {
                 "x": 64,
                 "y": 512,
@@ -170,7 +170,7 @@
             "rotated": false,
             "trimmed": false
         },
-        "tupac_caged_0017": {
+        "elvis_caged_0017": {
             "frame": {
                 "x": 64,
                 "y": 640,
@@ -180,7 +180,7 @@
             "rotated": false,
             "trimmed": false
         },
-        "tupac_caged_0018": {
+        "elvis_caged_0018": {
             "frame": {
                 "x": 64,
                 "y": 768,
@@ -190,7 +190,7 @@
             "rotated": false,
             "trimmed": false
         },
-        "tupac_caged_0019": {
+        "elvis_caged_0019": {
             "frame": {
                 "x": 64,
                 "y": 896,
@@ -200,7 +200,7 @@
             "rotated": false,
             "trimmed": false
         },
-        "tupac_caged_0020": {
+        "elvis_caged_0020": {
             "frame": {
                 "x": 64,
                 "y": 1024,
@@ -210,7 +210,7 @@
             "rotated": false,
             "trimmed": false
         },
-        "tupac_caged_0021": {
+        "elvis_caged_0021": {
             "frame": {
                 "x": 64,
                 "y": 1152,
@@ -220,7 +220,7 @@
             "rotated": false,
             "trimmed": false
         },
-        "tupac_caged_0022": {
+        "elvis_caged_0022": {
             "frame": {
                 "x": 64,
                 "y": 1280,
@@ -230,7 +230,7 @@
             "rotated": false,
             "trimmed": false
         },
-        "tupac_caged_0023": {
+        "elvis_caged_0023": {
             "frame": {
                 "x": 64,
                 "y": 1408,
@@ -246,8 +246,8 @@
         "version": "1.0",
         "author": "Vindrogames",
         "created": "2025-07-17",
-        "description": "Animated sprite for charcater unveil used in Astral Recon World 1.",
-        "image": "tupac_caged_animation.png",
+        "description": "Animated sprite for charcater unveil used in Astral Recon World 2.",
+        "image": "elvis_caged_animation.png",
         "format": "RGBA8888",
         "size": {
             "w": 128,
@@ -265,7 +265,7 @@
             "tile",
             "animation",
             "astral-recon",
-            "tupac-caged"
+            "elvis-caged"
         ],
         "license": "All Rights Reserved"
     }
