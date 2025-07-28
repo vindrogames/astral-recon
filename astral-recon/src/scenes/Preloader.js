@@ -17,7 +17,10 @@ export default class Preloader extends Phaser.Scene {
         this.load.image("world_2_btn_light", "start_screen/world_2_btn_light.png");
         this.load.atlas("worlds_recon_animation", "start_screen/worlds_recon_animation.png", "start_screen/worlds_recon_animation.json");
         this.load.image("tupac_complete", "/start_screen/tupac_complete.png");
-        this.load.image("elvis_complete", "/start_screen/elvis_complete.png")
+        this.load.image("elvis_complete", "/start_screen/elvis_complete.png");
+        
+        // Player asset for all worlds
+        this.load.atlas("player_animation", "player/mach_animation_all.png", "player/mach_animation_all.json");
     }
 
     // starts StartScreen

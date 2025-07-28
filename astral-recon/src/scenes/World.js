@@ -2,6 +2,7 @@
 import GameState from '../managers/GameState.js';
 import RoomManager from '../managers/RoomManager.js';
 import GameButton from '../gameobjects/GameButton.js';
+import { Wall } from '../gameobjects/Wall.js';
 
 
 export default class World extends Phaser.Scene {
@@ -132,6 +133,7 @@ export default class World extends Phaser.Scene {
         this.scene.cleanupObjects = [];
         this.layer = null;
         this.map = null;
+        this.tilemap = null;
         this.keyTile = null;
         this.pressedKeyTile = null;
         this.staticOpenDoor = null;
@@ -189,5 +191,25 @@ export default class World extends Phaser.Scene {
             });
 
         this.nextBtn.setDepth(42);
+    }
+
+    triggerWallAt(tileX, tileY) {
+        if (!this.walls) return;
+        
+        this.walls.forEach(wall => {
+            const wallTileX = Math.round((wall.x - 32) / 64);
+            const wallTileY = Math.round((wall.y - 32) / 64);
+            
+            if (wallTileX === tileX && wallTileY === tileY && !wall.isTriggered) {
+                wall.triggerWall();
+            }
+        });
+    }
+
+    update() {
+        // Update player if it exists
+        if (this.player) {
+            this.player.update();
+        }
     }
 }

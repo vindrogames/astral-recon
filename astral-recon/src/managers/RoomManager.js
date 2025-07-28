@@ -2,6 +2,8 @@
 import GameState from './GameState.js';
 import KeyTile from '../gameobjects/Key_tile.js';
 import Door from '../gameobjects/Door.js';
+import { Player } from '../gameobjects/Player.js';
+import { Wall } from '../gameobjects/Wall.js';
 
 export default class RoomManager {
 
@@ -35,6 +37,12 @@ export default class RoomManager {
 
         // Creeate and manage room keyTile
         this.setupKeyTile(this.roomConfig);
+
+        // Create and spawn player
+        this.spawnPlayer(this.roomConfig);
+
+        // Create wall sprites for death tiles (index 2)
+        this.createWalls();
     }
 
     loadTileMap(roomConfig) {
@@ -49,6 +57,7 @@ export default class RoomManager {
 
         // declare map and layer for scene and push to objects to cleanUp
         this.scene.map = map;
+        this.scene.tilemap = map; // Player class expects tilemap property
         this.scene.layer = layer;
         this.scene.cleanupObjects.push(map, layer);
     }
@@ -60,6 +69,55 @@ export default class RoomManager {
         this.scene.keyTile = keyTile;
         this.scene.cleanupObjects.push(keyTile);
         keyTile.playAnimation?.();
+    }
+
+    spawnPlayer(roomConfig) {
+        if (!roomConfig.playerStart) return;
+
+        // Destroy existing player if it exists
+        if (this.scene.player) {
+            this.scene.player.destroy();
+        }
+
+        // Create new player at the specified start position
+        // Use player asset loaded in main Preloader
+        this.scene.player = new Player(
+            this.scene,
+            roomConfig.playerStart.x,
+            roomConfig.playerStart.y,
+            'player_animation'
+        );
+
+        // Convert pixel coordinates to tile coordinates and center player properly
+        const tileX = Math.floor(roomConfig.playerStart.x / 64);
+        const tileY = Math.floor(roomConfig.playerStart.y / 64);
+        this.scene.player.setTilePosition(tileX, tileY);
+
+        this.scene.cleanupObjects.push(this.scene.player);
+    }
+
+    createWalls() {
+        // Initialize walls array
+        this.scene.walls = [];
+
+        if (!this.scene.map) return;
+
+        // Create wall objects for tiles with index 2 (death tiles)
+        for (let y = 0; y < this.scene.map.height; y++) {
+            for (let x = 0; x < this.scene.map.width; x++) {
+                const tile = this.scene.map.getTileAt(x, y);
+                if (tile && tile.index === 2) {
+                    const wall = new Wall(
+                        this.scene,
+                        x * 64 + 32, // Center in tile
+                        y * 64 + 32,
+                        'wall_animation_world_1' // Use world-specific wall animation
+                    );
+                    this.scene.walls.push(wall);
+                    this.scene.cleanupObjects.push(wall);
+                }
+            }
+        }
     }
 
     handleRoomEntryAnimations(roomConfig) {
@@ -93,11 +151,14 @@ export default class RoomManager {
         this.scene.cleanupObjects = [];
         this.scene.layer = null;
         this.scene.map = null;
+        this.scene.tilemap = null;
         this.scene.keyTile = null;
         this.scene.pressedKeyTile = null;
         this.scene.staticOpenDoor = null;
         this.scene.closedDoorPlaceholder = null;
         this.scene.cagedAstro = null;
+        this.scene.player = null;
+        this.scene.walls = [];
     }
 
     checkKeyTileCollision(playerX, playerY) {
