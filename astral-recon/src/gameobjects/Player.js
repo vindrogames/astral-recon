@@ -20,7 +20,11 @@ export class Player extends GameObjects.Sprite {
         this.startY = y;
         
         this.createAnimations(scene, asset);
-        this.play('idle_front');
+        
+        // Only play animation if it was successfully created
+        if (scene.anims.exists('idle_front')) {
+            this.play('idle_front');
+        }
         
         this.cursors = scene.input.keyboard.createCursorKeys();
         this.wasd = scene.input.keyboard.addKeys('W,S,A,D');
@@ -48,12 +52,16 @@ export class Player extends GameObjects.Sprite {
 
         animations.forEach(anim => {
             if (!scene.anims.exists(anim.key)) {
-                scene.anims.create({
-                    key: anim.key,
-                    frames: scene.anims.generateFrameNumbers(asset, { start: anim.start, end: anim.end }),
-                    frameRate: anim.frameRate,
-                    repeat: anim.repeat !== undefined ? anim.repeat : -1
-                });
+                try {
+                    scene.anims.create({
+                        key: anim.key,
+                        frames: scene.anims.generateFrameNumbers(asset, { start: anim.start, end: anim.end }),
+                        frameRate: anim.frameRate,
+                        repeat: anim.repeat !== undefined ? anim.repeat : -1
+                    });
+                } catch (error) {
+                    console.error(`Failed to create animation ${anim.key}:`, error);
+                }
             }
         });
     }
@@ -90,7 +98,9 @@ export class Player extends GameObjects.Sprite {
         if (!downPressed) this.keyPressed.down = false;
 
         if (!this.isMoving) {
-            this.play('idle_front', true);
+            if (this.scene.anims.exists('idle_front')) {
+                this.play('idle_front', true);
+            }
         }
     }
 
@@ -105,13 +115,19 @@ export class Player extends GameObjects.Sprite {
             return;
         }
         
+        // Calculate tile coordinates
         const newTileX = Math.round((newX - this.tileSize/2) / this.tileSize);
         const newTileY = Math.round((newY - this.tileSize/2) / this.tileSize);
+        
+        // Prevent movement to top row (row 0)
+        if (newTileY === 0) {
+            return;
+        }
         
         if (this.scene.tilemap) {
             const tile = this.scene.tilemap.getTileAt(newTileX, newTileY);
             if (tile) {
-                if (tile.index === 3) {
+                if (tile.index === 2) {
                     this.currentDirection = direction;
                     this.scene.triggerWallAt(newTileX, newTileY);
                     this.die();
@@ -132,7 +148,10 @@ export class Player extends GameObjects.Sprite {
         
         this.isMoving = true;
         this.currentDirection = direction;
-        this.play(`walk_${direction}`, true);
+        const walkAnim = `walk_${direction}`;
+        if (this.scene.anims.exists(walkAnim)) {
+            this.play(walkAnim, true);
+        }
         
         this.scene.tweens.add({
             targets: this,
@@ -142,7 +161,9 @@ export class Player extends GameObjects.Sprite {
             ease: 'Power2',
             onComplete: () => {
                 this.isMoving = false;
-                this.play('idle_front', true);
+                if (this.scene.anims.exists('idle_front')) {
+                    this.play('idle_front', true);
+                }
             }
         });
     }
@@ -185,7 +206,9 @@ export class Player extends GameObjects.Sprite {
         this.setAlpha(1);
         this.setVisible(true);
         
-        this.play('idle_front', true);
+        if (this.scene.anims.exists('idle_front')) {
+            this.play('idle_front', true);
+        }
     }
 
     getTilePosition() {
