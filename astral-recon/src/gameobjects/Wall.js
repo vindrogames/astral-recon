@@ -16,7 +16,7 @@ export class Wall extends GameObjects.Sprite {
             scene.anims.create({
                 key: 'wall_animation', 
                 frames: scene.anims.generateFrameNames(asset, { 
-                    prefix: 'wall_animation_imgset', 
+                    prefix: 'wall_animation_',
                     start: 0, 
                     end: 5, 
                     suffix: '.png' 

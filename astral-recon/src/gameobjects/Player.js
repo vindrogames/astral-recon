@@ -1,4 +1,5 @@
 import { GameObjects } from "phaser";
+import Game_config from "../configs/Game_config";
 
 export class Player extends GameObjects.Sprite {
 
@@ -124,6 +125,8 @@ export class Player extends GameObjects.Sprite {
             return;
         }
         
+        console.log(this.x, this.y, newX, newTileX, newY, newTileY);
+
         if (this.scene.tilemap) {
             const tile = this.scene.tilemap.getTileAt(newTileX, newTileY);
             if (tile) {

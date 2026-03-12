@@ -77,7 +77,7 @@ export default {
                 assetPath: 'map/door_top_animation_world_1.png',
                 atlasPath: 'map/door_top_animation_world_1.json'
             },
-            
+
             {
                 assetKey: 'wall_animation_world_1',
                 assetPath: 'map/wall_animation_world_1.png',
@@ -163,7 +163,7 @@ export default {
                 repeat: 0,
                 frameRate: 6,
                 staticOpenDoor: 'door_left_open_static_world_1'
-            }
+            },
         },
         {
             csv: 'world_1_room_2',
@@ -277,8 +277,10 @@ export default {
             }
         },
     ],
-    //playerClass: 'PlayerW1',
-    keyTileClass: 'KeyTile',
+    player: {
+        speed: 300,
+    }
+    // keyTileClass: 'KeyTile',
     //doorClass: 'Door',
     //difficulty: 'hard', // default
 };
