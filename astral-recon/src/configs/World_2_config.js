@@ -235,7 +235,7 @@ export default {
             },
         },
     ],
-    //playerClass: 'PlayerW1',
+    playerClass: 'PlayerW2',
     keyTileClass: 'KeyTile',
     //doorClass: 'Door',
     //difficulty: 'hard', // default
