@@ -1,0 +1,91 @@
+{
+    "frames": {
+        "door_0000": {
+            "frame": {
+                "x": 0,
+                "y": 0,
+                "w": 64,
+                "h": 64
+            },
+            "rotated": false,
+            "trimmed": false
+        },
+        "door_0001": {
+            "frame": {
+                "x": 64,
+                "y": 0,
+                "w": 64,
+                "h": 64
+            },
+            "rotated": false,
+            "trimmed": false
+        },
+        "door_0002": {
+            "frame": {
+                "x": 0,
+                "y": 64,
+                "w": 64,
+                "h": 64
+            },
+            "rotated": false,
+            "trimmed": false
+        },
+        "door_0003": {
+            "frame": {
+                "x": 64,
+                "y": 64,
+                "w": 64,
+                "h": 64
+            },
+            "rotated": false,
+            "trimmed": false
+        },
+        "door_0004": {
+            "frame": {
+                "x": 0,
+                "y": 128,
+                "w": 64,
+                "h": 64
+            },
+            "rotated": false,
+            "trimmed": false
+        },
+        "door_0005": {
+            "frame": {
+                "x": 64,
+                "y": 128,
+                "w": 64,
+                "h": 64
+            },
+            "rotated": false,
+            "trimmed": false
+        }
+    },
+    "meta": {
+        "app": "Vindrogames (manual)",
+        "version": "1.0",
+        "author": "Vindrogames",
+        "created": "2025-07-17",
+        "description": "Top Door open animation used in Astral Recon World 1.",
+        "image": "door_top_animation_world_1.png",
+        "format": "RGBA8888",
+        "size": {
+            "w": 384,
+            "h": 256
+        },
+        "scale": "1",
+        "frameCount": 5,
+        "frameSize": {
+            "w": 64,
+            "h": 64
+        },
+        "loop": false,
+        "tags": [
+            "animation",
+            "astral-recon",
+            "top-door-open",
+            "world_1"
+        ],
+        "license": "All Rights Reserved"
+    }
+}

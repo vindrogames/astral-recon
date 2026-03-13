@@ -1,0 +1,150 @@
+{
+    "frames": {
+        "worlds_00": {
+            "frame": {
+                "x": 0,
+                "y": 0,
+                "w": 320,
+                "h": 128
+            },
+            "rotated": false,
+            "trimmed": false
+        },
+        "worlds_01": {
+            "frame": {
+                "x": 320,
+                "y": 0,
+                "w": 320,
+                "h": 128
+            },
+            "rotated": false,
+            "trimmed": false
+        },
+        "worlds_02": {
+            "frame": {
+                "x": 640,
+                "y": 0,
+                "w": 320,
+                "h": 128
+            },
+            "rotated": false,
+            "trimmed": false
+        },
+        "worlds_03": {
+            "frame": {
+                "x": 0,
+                "y": 128,
+                "w": 320,
+                "h": 128
+            },
+            "rotated": false,
+            "trimmed": false
+        },
+        "worlds_04": {
+            "frame": {
+                "x": 320,
+                "y": 128,
+                "w": 320,
+                "h": 128
+            },
+            "rotated": false,
+            "trimmed": false
+        },
+        "worlds_05": {
+            "frame": {
+                "x": 640,
+                "y": 128,
+                "w": 320,
+                "h": 128
+            },
+            "rotated": false,
+            "trimmed": false
+        },
+        "worlds_06": {
+            "frame": {
+                "x": 0,
+                "y": 256,
+                "w": 320,
+                "h": 128
+            },
+            "rotated": false,
+            "trimmed": false
+        },
+        "worlds_07": {
+            "frame": {
+                "x": 320,
+                "y": 256,
+                "w": 320,
+                "h": 128
+            },
+            "rotated": false,
+            "trimmed": false
+        },
+        "worlds_08": {
+            "frame": {
+                "x": 640,
+                "y": 256,
+                "w": 320,
+                "h": 128
+            },
+            "rotated": false,
+            "trimmed": false
+        },
+        "worlds_09": {
+            "frame": {
+                "x": 0,
+                "y": 384,
+                "w": 320,
+                "h": 128
+            },
+            "rotated": false,
+            "trimmed": false
+        },
+        "worlds_10": {
+            "frame": {
+                "x": 320,
+                "y": 384,
+                "w": 320,
+                "h": 128
+            },
+            "rotated": false,
+            "trimmed": false
+        },
+        "worlds_11": {
+            "frame": {
+                "x": 640,
+                "y": 384,
+                "w": 320,
+                "h": 128
+            },
+            "rotated": false,
+            "trimmed": false
+        }
+    },
+    "meta": {
+        "app": "Vindrogames (manual)",
+        "version": "1.0",
+        "author": "Vindrogames",
+        "created": "2025-07-17",
+        "description": "Unknown Worlds animation used in Astral Recon Start Scene.",
+        "image": "worlds_recon_animation.png",
+        "format": "RGBA8888",
+        "size": {
+            "w": 960,
+            "h": 125
+        },
+        "scale": "1",
+        "frameCount": 24,
+        "frameSize": {
+            "w": 320,
+            "h": 128
+        },
+        "loop": false,
+        "tags": [
+            "animation",
+            "astral-recon",
+            "Start-cene"
+        ],
+        "license": "All Rights Reserved"
+    }
+}
