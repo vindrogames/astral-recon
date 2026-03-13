@@ -65,6 +65,35 @@ export default class World extends Phaser.Scene {
             console.log(`Cheat mode: ${this.cheatMode ? 'ON' : 'OFF'}`);
         });
 
+        // Touch/swipe input for mobile
+        const SWIPE_THRESHOLD = 30;
+        this.touchStartX = null; // null until a pointerdown is captured in this scene
+        this.touchStartY = null;
+
+        this.input.on('pointerdown', (pointer) => {
+            this.touchStartX = pointer.x;
+            this.touchStartY = pointer.y;
+        });
+
+        this.input.on('pointerup', (pointer) => {
+            // Ignore if no pointerdown was recorded in this scene (e.g. carry-over from StartScene tap)
+            if (this.touchStartX === null) return;
+            if (!this.player || !this.player.active || this.player.isMoving) return;
+
+            const dx = pointer.x - this.touchStartX;
+            const dy = pointer.y - this.touchStartY;
+
+            if (Math.abs(dx) < SWIPE_THRESHOLD && Math.abs(dy) < SWIPE_THRESHOLD) return;
+
+            if (Math.abs(dx) > Math.abs(dy)) {
+                if (dx > 0) this.player.moveToTile(1, 0, 'right');
+                else this.player.moveToTile(-1, 0, 'left');
+            } else {
+                if (dy > 0) this.player.moveToTile(0, 1, 'down');
+                else this.player.moveToTile(0, -1, 'up');
+            }
+        });
+
         // Initiates RoomManager for current World with World config
         this.roomManager = new RoomManager(this, this.config);
 

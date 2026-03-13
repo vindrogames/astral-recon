@@ -111,19 +111,18 @@ export class Player extends GameObjects.Sprite {
     }
 
     moveToTile(deltaX, deltaY, direction) {
-        const newX = this.x + (deltaX * this.tileSize);
-        const newY = this.y + (deltaY * this.tileSize);
-        
-        const worldBounds = this.scene.physics.world.bounds;
-        
-        if (newX < this.tileSize/2 || newX > worldBounds.width - this.tileSize/2 ||
-            newY < this.tileSize/2 || newY > worldBounds.height - this.tileSize/2) {
-            return;
-        }
-        
-        // Calculate tile coordinates
-        const newTileX = Math.round((newX - this.tileSize/2) / this.tileSize);
-        const newTileY = Math.round((newY - this.tileSize/2) / this.tileSize);
+        // Work in tile space to avoid float drift from tweens blocking border doors
+        const curTileX = Math.round((this.x - this.tileSize / 2) / this.tileSize);
+        const curTileY = Math.round((this.y - this.tileSize / 2) / this.tileSize);
+        const newTileX = curTileX + deltaX;
+        const newTileY = curTileY + deltaY;
+
+        // Bounds check in tile coords (9x9 grid, indices 0–8)
+        if (newTileX < 0 || newTileX >= 9 || newTileY < 0 || newTileY >= 9) return;
+
+        // Derive exact pixel centre from tile index (no float drift)
+        const newX = newTileX * this.tileSize + this.tileSize / 2;
+        const newY = newTileY * this.tileSize + this.tileSize / 2;
         
         if (this.scene.tilemap) {
             const tile = this.scene.tilemap.getTileAt(newTileX, newTileY);

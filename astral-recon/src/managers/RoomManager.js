@@ -3,7 +3,12 @@ import GameState from './GameState.js';
 import KeyTile from '../gameobjects/Key_tile.js';
 import Door from '../gameobjects/Door.js';
 import { Player } from '../gameobjects/Player.js';
+import { PlayerW2 } from '../gameobjects/PlayerW2.js';
 import { Wall } from '../gameobjects/Wall.js';
+
+const PLAYER_CLASSES = {
+    PlayerW2,
+};
 
 export default class RoomManager {
 
@@ -81,7 +86,8 @@ export default class RoomManager {
 
         // Create new player at the specified start position
         // Use player asset loaded in main Preloader
-        this.scene.player = new Player(
+        const PlayerClass = PLAYER_CLASSES[this.config.playerClass] ?? Player;
+        this.scene.player = new PlayerClass(
             this.scene,
             roomConfig.playerStart.x,
             roomConfig.playerStart.y,
