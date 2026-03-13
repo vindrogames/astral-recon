@@ -14,16 +14,16 @@ export class Wall extends GameObjects.Sprite {
 
         if (!scene.anims.exists('wall_animation')) {
             scene.anims.create({
-                key: 'wall_animation', 
-                frames: scene.anims.generateFrameNames(asset, { 
-                    prefix: 'wall_animation_imgset', 
-                    start: 0, 
-                    end: 5, 
-                    suffix: '.png' 
-                }), 
+                key: 'wall_animation',
+                frames: scene.anims.generateFrameNames(asset, {
+                    prefix: 'wall_animation_',
+                    start: 0,
+                    end: 5,
+                    zeroPad: 4
+                }),
                 repeat: 0,
                 frameRate: 8,
-            }); 
+            });
         }
     }
 

@@ -3,6 +3,7 @@ import Game_config from "./Game_config";
 export default {
     key: 'world_2',
     tilesetImage: 'world_2_tileset_64',
+    wallAnimationKey: 'wall_animation_world_2',
     assets: {
         tilemaps: [
             {
@@ -78,6 +79,11 @@ export default {
                 atlasPath: 'map/door_right_animation_world_2.json'
             },
             {
+                assetKey: 'wall_animation_world_2',
+                assetPath: 'map/wall_animation_world_2.png',
+                atlasPath: 'map/wall_animation_world_2.json'
+            },
+            {
                 assetKey: 'elvis_caged_animation',
                 assetPath: 'avatars/elvis_caged_animation.png',
                 atlasPath: 'avatars/elvis_caged_animation.json'
@@ -146,14 +152,15 @@ export default {
                 zeroPad: 4,
                 repeat: 0,
                 frameRate: 6,
-                closedDoorPlaceholder: 'door_top_closed_placeholder_world_2'
+                closedDoorPlaceholder: 'door_top_closed_placeholder_world_2',
+                openTileIndex: 15
             }
         },
         {
             csv: 'world_2_room_2',
             playerStart: {
-                x: 64,
-                y: 64
+                x: 352, // col 5, bottom entry (Room 1 exits top at col 5)
+                y: 480  // row 7
             },
             keyTile: {
                 // tileSize * pos [0-8] -> 0=left edge, 8=right egde +32 to center in tile
@@ -179,14 +186,15 @@ export default {
                 zeroPad: 4,
                 repeat: 0,
                 frameRate: 6,
-                closedDoorPlaceholder: 'door_right_closed_placeholder_world_2'
+                closedDoorPlaceholder: 'door_right_closed_placeholder_world_2',
+                openTileIndex: 15
             }
         },
         {
             csv: 'world_2_room_3',
             playerStart: {
-                x: 64,
-                y: 64
+                x: 96,  // col 1, left entry (Room 2 exits right at row 6)
+                y: 416  // row 6
             },
             keyTile: {
                 // tileSize * pos [0-8] -> 0=left edge, 8=right egde +32 to center in tile

@@ -3,8 +3,6 @@ import Preloader from './scenes/Preloader.js';
 import StartScene from './scenes/StartScene.js';
 import World from './scenes/World.js';
 import Game_config from './configs/Game_config.js';
-// import { World_1 } from "./scenes/World_1";
-// import { World_2 } from "./scenes/World_2";
 
 // More information about config: https://newdocs.phaser.io/docs/3.70.0/Phaser.Types.Core.GameConfig
 const config = {
@@ -34,4 +32,13 @@ const config = {
     ]
 };
 
-new Phaser.Game(config);
+const game = new Phaser.Game(config);
+
+// Ensure the canvas captures keyboard events by keeping it focused
+game.events.on('ready', () => {
+    game.canvas.setAttribute('tabindex', '1');
+    game.canvas.style.outline = 'none';
+    game.canvas.focus();
+});
+
+window.addEventListener('click', () => game.canvas.focus());

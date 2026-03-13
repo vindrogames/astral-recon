@@ -3,6 +3,7 @@ import Game_config from "./Game_config";
 export default {
     key: 'world_1',
     tilesetImage: 'world_1_tileset_64',
+    wallAnimationKey: 'wall_animation_world_1',
     assets: {
         tilemaps: [
             {
@@ -162,14 +163,15 @@ export default {
                 zeroPad: 4,
                 repeat: 0,
                 frameRate: 6,
-                staticOpenDoor: 'door_left_open_static_world_1'
+                staticOpenDoor: 'door_left_open_static_world_1',
+                openTileIndex: 15
             }
         },
         {
             csv: 'world_1_room_2',
             playerStart: {
-                x: 64,
-                y: 64
+                x: 480, // col 7, right side entry (Room 1 exits left at row 4)
+                y: 288  // row 4
             },
             keyTile: {
                 pos_X: Game_config.tileSize * Game_config.col_3 + Game_config.centerTile,
@@ -206,14 +208,15 @@ export default {
                 zeroPad: 4,
                 repeat: 0,
                 frameRate: 6,
-                staticOpenDoor: 'door_top_open_static_world_1'
+                staticOpenDoor: 'door_top_open_static_world_1',
+                openTileIndex: 15
             },
         },
         {
             csv: 'world_1_room_3',
             playerStart: {
-                x: 64,
-                y: 64
+                x: 288, // col 4, bottom entry (Room 2 exits top at col 4)
+                y: 480  // row 7
             },
             keyTile: {
                 pos_X: Game_config.tileSize * Game_config.col_6 + Game_config.centerTile,
