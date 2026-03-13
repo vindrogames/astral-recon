@@ -78,7 +78,7 @@ export default {
                 assetPath: 'map/door_top_animation_world_1.png',
                 atlasPath: 'map/door_top_animation_world_1.json'
             },
-            
+
             {
                 assetKey: 'wall_animation_world_1',
                 assetPath: 'map/wall_animation_world_1.png',
@@ -280,8 +280,10 @@ export default {
             }
         },
     ],
-    //playerClass: 'PlayerW1',
-    keyTileClass: 'KeyTile',
+    player: {
+        speed: 300,
+    }
+    // keyTileClass: 'KeyTile',
     //doorClass: 'Door',
     //difficulty: 'hard', // default
 };

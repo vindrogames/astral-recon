@@ -1,4 +1,5 @@
 import { GameObjects } from "phaser";
+import Game_config from "../configs/Game_config";
 
 export class Player extends GameObjects.Sprite {
 
