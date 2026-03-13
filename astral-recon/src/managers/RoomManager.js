@@ -97,22 +97,17 @@ export default class RoomManager {
     }
 
     createWalls() {
-        // Initialize walls array
         this.scene.walls = [];
 
         if (!this.scene.map) return;
 
-        // Create wall objects for tiles with index 2 (death tiles)
+        const wallAssetKey = this.config.wallAnimationKey;
+
         for (let y = 0; y < this.scene.map.height; y++) {
             for (let x = 0; x < this.scene.map.width; x++) {
                 const tile = this.scene.map.getTileAt(x, y);
                 if (tile && tile.index === 2) {
-                    const wall = new Wall(
-                        this.scene,
-                        x * 64 + 32, // Center in tile
-                        y * 64 + 32,
-                        'wall_animation_world_1' // Use world-specific wall animation
-                    );
+                    const wall = new Wall(this.scene, x * 64 + 32, y * 64 + 32, wallAssetKey);
                     this.scene.walls.push(wall);
                     this.scene.cleanupObjects.push(wall);
                 }
@@ -125,7 +120,7 @@ export default class RoomManager {
         // Adds placeholder to be destroyed when exit door animation runs, then added to cleanup
         if (roomConfig.exitDoorAnimation?.closedDoorPlaceholder) {
             const cfg = roomConfig.exitDoorAnimation;
-            this.scene.closedDoorPlaceholder = this.scene.add.image(cfg.pos_X, cfg.pos_Y, cfg.closedDoorPlaceholder).setDepth(42);
+            this.scene.closedDoorPlaceholder = this.scene.add.image(cfg.pos_X, cfg.pos_Y, cfg.closedDoorPlaceholder).setDepth(2);
             this.scene.cleanupObjects.push(this.scene.closedDoorPlaceholder);
         }
 
@@ -162,24 +157,17 @@ export default class RoomManager {
     }
 
     checkKeyTileCollision(playerX, playerY) {
+        if (GameState.keyCollected || !this.scene.keyTile) return;
+
         const tile = this.scene.map.getTileAtWorldXY(playerX, playerY);
+        if (tile?.index !== 1) return;
 
-        // '1' is key tile placeholder index in csv map
-        if (tile?.index === 1 && this.scene.keyTile && !GameState.keyCollected) {
-            this.pressKeyTile(); // Delegate to KeyTile
-        }
-
-        // This function will go inside the conditional once we have player
         this.pressKeyTile();
-        console.log(GameState.currentRoomIndex);
 
-        // This if statement should go in collision IF when player is added
-        if (GameState.currentRoomIndex === 0 || GameState.currentRoomIndex === 1) {
-
-            console.log(this.roomConfig.exitDoorAnimation);
+        const lastRoomIndex = this.config.rooms.length - 1;
+        if (GameState.currentRoomIndex < lastRoomIndex) {
             this.triggerDoorAnimation(this.roomConfig.exitDoorAnimation, 'exit');
         } else {
-            console.log('last room');
             this.endWorldSequence();
         }
     }
@@ -196,7 +184,7 @@ export default class RoomManager {
             cfg.pos_X,
             cfg.pos_Y,
             cfg.pressedKey ?? 0
-        ).setDepth(42);
+        ).setDepth(2);
 
         // pushes pressedKeyTile to be destroyed on cleanup when changinng rooms
         this.scene.cleanupObjects.push(this.scene.pressedKeyTile);
@@ -209,11 +197,8 @@ export default class RoomManager {
     }
 
     triggerDoorAnimation(cfg, type = 'exit') {
-        // Reverse is true when type is 'entry'
         const reverse = type === 'entry';
 
-        console.log(cfg);
-        // For exit doors: destroy the wall blocking the exit
         if (type === 'exit' && this.scene.closedDoorPlaceholder) {
             this.scene.closedDoorPlaceholder.destroy();
             this.scene.closedDoorPlaceholder = null;
@@ -226,6 +211,13 @@ export default class RoomManager {
             if (type === 'exit' && cfg.staticOpenDoor) {
                 const openDoor = this.scene.add.image(door.x, door.y, cfg.staticOpenDoor).setDepth(42);
                 this.scene.cleanupObjects.push(openDoor);
+            }
+
+            // Update the tilemap tile so the player can walk through the door
+            if (type === 'exit' && cfg.openTileIndex !== undefined && this.scene.map) {
+                const tileX = Math.floor(cfg.pos_X / 64);
+                const tileY = Math.floor(cfg.pos_Y / 64);
+                this.scene.map.putTileAt(cfg.openTileIndex, tileX, tileY);
             }
 
             if (type === 'entry' && this.scene.staticOpenDoor) {
@@ -302,13 +294,12 @@ export default class RoomManager {
         this.astroRevealed.on('animationcomplete', () => {
 
             if (this.roomConfig.endDialogue) {
-
                 const endDialogueCnfg = this.roomConfig.endDialogue;
                 if (!this.scene.anims.exists(endDialogueCnfg.animationKey)) {
                     this.scene.anims.create({
                         key: endDialogueCnfg.animationKey,
                         frames: this.scene.anims.generateFrameNames(endDialogueCnfg.atlasKey, {
-                            prefix: endDialogueCnfg.prefix,  // <-- adjust this prefix to match your JSON keys
+                            prefix: endDialogueCnfg.prefix,
                             start: endDialogueCnfg.start,
                             end: endDialogueCnfg.end,
                             zeroPad: endDialogueCnfg.zeroPad
@@ -318,7 +309,6 @@ export default class RoomManager {
                     });
                 }
 
-                // Adds sprite animation to Start Screen and plays Sprite
                 this.endDialogue = this.scene.add.sprite(
                     endDialogueCnfg.pos_X,
                     endDialogueCnfg.pos_Y,
@@ -330,12 +320,18 @@ export default class RoomManager {
 
                 this.endDialogue.on('animationcomplete', () => {
                     this.scene.cameras.main.fadeOut(1000, 0, 0, 0);
-
                     this.endDialogue.destroy();
-                    this.astroRevealed.destroy()
+                    this.astroRevealed.destroy();
                     this.scene.cameras.main.once('camerafadeoutcomplete', () => {
-                        this.scene.quitWorld(); // or delegate to RoomManager if needed
+                        this.scene.quitWorld();
                     });
+                });
+            } else {
+                // No end dialogue — fade out and return to start screen
+                this.scene.cameras.main.fadeOut(1000, 0, 0, 0);
+                this.astroRevealed.destroy();
+                this.scene.cameras.main.once('camerafadeoutcomplete', () => {
+                    this.scene.quitWorld();
                 });
             }
         });

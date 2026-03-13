@@ -58,6 +58,13 @@ export default class World extends Phaser.Scene {
             this.createSimulationButtons();
         }
 
+        // Cheat mode toggle — press C to bypass death tiles (debug only)
+        this.cheatMode = false;
+        this.input.keyboard.on('keydown-C', () => {
+            this.cheatMode = !this.cheatMode;
+            console.log(`Cheat mode: ${this.cheatMode ? 'ON' : 'OFF'}`);
+        });
+
         // Initiates RoomManager for current World with World config
         this.roomManager = new RoomManager(this, this.config);
 
@@ -193,13 +200,19 @@ export default class World extends Phaser.Scene {
         this.nextBtn.setDepth(42);
     }
 
+    handleDoorTransition(tileX, tileY) {
+        if (GameState.keyCollected) {
+            this.roomManager.goToNextRoom();
+        }
+    }
+
     triggerWallAt(tileX, tileY) {
         if (!this.walls) return;
-        
+
         this.walls.forEach(wall => {
             const wallTileX = Math.round((wall.x - 32) / 64);
             const wallTileY = Math.round((wall.y - 32) / 64);
-            
+
             if (wallTileX === tileX && wallTileY === tileY && !wall.isTriggered) {
                 wall.triggerWall();
             }

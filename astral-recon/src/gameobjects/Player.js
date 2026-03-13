@@ -9,6 +9,7 @@ export class Player extends GameObjects.Sprite {
         scene.add.existing(this);
         scene.physics.add.existing(this);
 
+        this.setDepth(5);
         this.body.setSize(48, 48);
         this.body.setOffset(8, 16);
         
@@ -68,7 +69,8 @@ export class Player extends GameObjects.Sprite {
     }
 
     update() {
-        if (this.body.enable === false) return;
+        if (!this.active || !this.scene) return;
+        if (this.body?.enable === false) return;
 
         if (this.isMoving) {
             return;
@@ -92,6 +94,9 @@ export class Player extends GameObjects.Sprite {
             this.keyPressed.down = true;
             this.moveToTile(0, 1, 'down');
         }
+
+        // moveToTile can trigger a room transition that destroys this player mid-frame
+        if (!this.active || !this.scene) return;
 
         if (!leftPressed) this.keyPressed.left = false;
         if (!rightPressed) this.keyPressed.right = false;
@@ -120,21 +125,17 @@ export class Player extends GameObjects.Sprite {
         const newTileX = Math.round((newX - this.tileSize/2) / this.tileSize);
         const newTileY = Math.round((newY - this.tileSize/2) / this.tileSize);
         
-        // Prevent movement to top row (row 0)
-        if (newTileY === 0) {
-            return;
-        }
-        
-        console.log(this.x, this.y, newX, newTileX, newY, newTileY);
-
         if (this.scene.tilemap) {
             const tile = this.scene.tilemap.getTileAt(newTileX, newTileY);
             if (tile) {
                 if (tile.index === 2) {
-                    this.currentDirection = direction;
-                    this.scene.triggerWallAt(newTileX, newTileY);
-                    this.die();
-                    return;
+                    if (!this.scene.cheatMode) {
+                        this.currentDirection = direction;
+                        this.scene.triggerWallAt(newTileX, newTileY);
+                        this.die();
+                        return;
+                    }
+                    // Cheat mode: pass through death tiles without dying
                 }
                 
                 const borderWalls = [5, 6, 8, 9, 10, 11, 12, 13, 16];
@@ -166,6 +167,10 @@ export class Player extends GameObjects.Sprite {
                 this.isMoving = false;
                 if (this.scene.anims.exists('idle_front')) {
                     this.play('idle_front', true);
+                }
+                // Check if player landed on a key tile
+                if (this.scene.roomManager) {
+                    this.scene.roomManager.checkKeyTileCollision(this.x, this.y);
                 }
             }
         });
@@ -224,5 +229,7 @@ export class Player extends GameObjects.Sprite {
     setTilePosition(tileX, tileY) {
         this.x = tileX * this.tileSize + this.tileSize/2;
         this.y = tileY * this.tileSize + this.tileSize/2;
+        this.startX = this.x;
+        this.startY = this.y;
     }
 }
