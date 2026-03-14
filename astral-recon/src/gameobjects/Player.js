@@ -30,12 +30,14 @@ export class Player extends GameObjects.Sprite {
         
         this.cursors = scene.input.keyboard.createCursorKeys();
         this.wasd = scene.input.keyboard.addKeys('W,S,A,D');
-        
+
+        // Pre-populate with current key state so any key held during room
+        // transition doesn't fire an immediate extra move on first update.
         this.keyPressed = {
-            left: false,
-            right: false,
-            up: false,
-            down: false
+            left:  this.cursors.left.isDown  || this.wasd.A.isDown,
+            right: this.cursors.right.isDown || this.wasd.D.isDown,
+            up:    this.cursors.up.isDown    || this.wasd.W.isDown,
+            down:  this.cursors.down.isDown  || this.wasd.S.isDown,
         };
     }
 
@@ -53,18 +55,14 @@ export class Player extends GameObjects.Sprite {
         ];
 
         animations.forEach(anim => {
-            if (!scene.anims.exists(anim.key)) {
-                try {
-                    scene.anims.create({
-                        key: anim.key,
-                        frames: scene.anims.generateFrameNumbers(asset, { start: anim.start, end: anim.end }),
-                        frameRate: anim.frameRate,
-                        repeat: anim.repeat !== undefined ? anim.repeat : -1
-                    });
-                } catch (error) {
-                    console.error(`Failed to create animation ${anim.key}:`, error);
-                }
-            }
+            // Always recreate so switching worlds doesn't leave stale frame references
+            if (scene.anims.exists(anim.key)) scene.anims.remove(anim.key);
+            scene.anims.create({
+                key: anim.key,
+                frames: scene.anims.generateFrameNumbers(asset, { start: anim.start, end: anim.end }),
+                frameRate: anim.frameRate,
+                repeat: anim.repeat !== undefined ? anim.repeat : -1
+            });
         });
     }
 
@@ -137,7 +135,7 @@ export class Player extends GameObjects.Sprite {
                     // Cheat mode: pass through death tiles without dying
                 }
                 
-                const borderWalls = [5, 6, 8, 9, 10, 11, 12, 13, 16];
+                const borderWalls = [3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16];
                 if (borderWalls.includes(tile.index)) {
                     return;
                 }

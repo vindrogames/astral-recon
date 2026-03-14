@@ -87,11 +87,12 @@ export default class RoomManager {
         // Create new player at the specified start position
         // Use player asset loaded in main Preloader
         const PlayerClass = PLAYER_CLASSES[this.config.playerClass] ?? Player;
+        const playerAsset = this.config.playerAsset ?? 'player_animation';
         this.scene.player = new PlayerClass(
             this.scene,
             roomConfig.playerStart.x,
             roomConfig.playerStart.y,
-            'player_animation'
+            playerAsset
         );
 
         // Convert pixel coordinates to tile coordinates and center player properly

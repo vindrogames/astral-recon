@@ -2,7 +2,30 @@ import { Player } from './Player.js';
 
 // World 2 player: slides in the pressed direction until hitting a wall,
 // border, or death tile. Death tiles act as stop obstacles (no death).
+// Uses a world-2-specific 8-frame sprite (4 cols × 2 rows, 64×64 each).
 export class PlayerW2 extends Player {
+
+    createAnimations(scene, asset) {
+        // Frames 0-3 (row 1): slide/walk cycle used for all directions
+        // Frames 4-7 (row 2): secondary animation (e.g. idle or alt walk)
+        const animations = [
+            { key: 'walk_down',  start: 0, end: 3, frameRate: 8 },
+            { key: 'walk_up',    start: 0, end: 3, frameRate: 8 },
+            { key: 'walk_left',  start: 0, end: 3, frameRate: 8 },
+            { key: 'walk_right', start: 0, end: 3, frameRate: 8 },
+            { key: 'idle_front', start: 4, end: 7, frameRate: 6 },
+        ];
+
+        animations.forEach(anim => {
+            if (scene.anims.exists(anim.key)) scene.anims.remove(anim.key);
+            scene.anims.create({
+                key: anim.key,
+                frames: scene.anims.generateFrameNumbers(asset, { start: anim.start, end: anim.end }),
+                frameRate: anim.frameRate,
+                repeat: -1
+            });
+        });
+    }
 
     moveToTile(deltaX, deltaY, direction) {
         if (!this.scene.tilemap) return;
@@ -16,7 +39,7 @@ export class PlayerW2 extends Player {
         let hitWallTile = null; // death tile that stopped the slide
 
         // Tiles that stop the slide (death tiles block without killing)
-        const STOP_TILES = [2, 5, 6, 8, 9, 10, 11, 12, 13, 16];
+        const STOP_TILES = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16];
 
         for (let step = 1; step <= 9; step++) {
             const checkX = curTileX + deltaX * step;

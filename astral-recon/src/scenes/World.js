@@ -52,12 +52,6 @@ export default class World extends Phaser.Scene {
             this.createUiButtons();
         }
 
-        // Creates simulation buttons for keyTile logic, door animations and switching rooms
-        // *TO BE DELETED*
-        if (!this.simBtn || !this.nextBtn) {
-            this.createSimulationButtons();
-        }
-
         // Cheat mode toggle — press C to bypass death tiles (debug only)
         this.cheatMode = false;
         this.input.keyboard.on('keydown-C', () => {
@@ -162,8 +156,6 @@ export default class World extends Phaser.Scene {
         }
 
         // Optional: clean UI references
-        this.simBtn = null;
-        this.nextBtn = null;
         this.buttons = {};
 
         this.scene.cleanupObjects = [];
@@ -199,35 +191,6 @@ export default class World extends Phaser.Scene {
         });
     }
 
-    // This will be deleted, *HOWEVER*
-    createSimulationButtons() {
-        const btnStyle = { fontSize: '18px', fill: '#fff', backgroundColor: '#000', padding: 10 };
-
-        // RoomManager has a checkKeyCollision Methos wich takes player pos_x and player pos_y
-        // As of now, I celebrate keyTileCollision regardless of coorinates
-        this.simBtn = this.add.text(21, 14, '🗝 Simulate Key', btnStyle)
-            .setInteractive({ useHandCursor: true })
-            .on('pointerdown', () => {
-                this.roomManager.checkKeyTileCollision(6, 6);
-            });
-
-        this.simBtn.setDepth(42);
-
-        // Room Manager handles changing rooms. So use this when machango leaves a door (if possible)
-        // Player can go back in world_2 (as an error), but not in world 1
-        this.nextBtn = this.add.text(400, 14, '➡️ Next Room', btnStyle)
-            .setInteractive({ useHandCursor: true })
-            .on('pointerdown', () => {
-                if (GameState.keyCollected) {
-                    this.roomManager.goToNextRoom();
-                } else {
-                    console.log('collect key first');
-                }
-
-            });
-
-        this.nextBtn.setDepth(42);
-    }
 
     handleDoorTransition(tileX, tileY) {
         if (GameState.keyCollected) {

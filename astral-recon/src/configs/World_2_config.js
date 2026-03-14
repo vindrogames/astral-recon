@@ -84,6 +84,11 @@ export default {
                 atlasPath: 'map/wall_animation_world_2.json'
             },
             {
+                assetKey: 'world_2_mach_animation_all',
+                assetPath: 'avatars/mach_animation_all_world_2.png',
+                atlasPath: 'avatars/mach_animation_all_world_2.json'
+            },
+            {
                 assetKey: 'elvis_caged_animation',
                 assetPath: 'avatars/elvis_caged_animation.png',
                 atlasPath: 'avatars/elvis_caged_animation.json'
@@ -236,6 +241,7 @@ export default {
         },
     ],
     playerClass: 'PlayerW2',
+    playerAsset: 'world_2_mach_animation_all',
     keyTileClass: 'KeyTile',
     //doorClass: 'Door',
     //difficulty: 'hard', // default
