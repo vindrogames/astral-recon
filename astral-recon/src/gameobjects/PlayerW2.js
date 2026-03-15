@@ -39,7 +39,7 @@ export class PlayerW2 extends Player {
         let hitWallTile = null; // death tile that stopped the slide
 
         // Tiles that stop the slide (death tiles block without killing)
-        const STOP_TILES = [2, 3, 4, 5, 6, 7, 8, 9, 10];
+        const STOP_TILES = [2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13];
 
         for (let step = 1; step <= 9; step++) {
             const checkX = curTileX + deltaX * step;

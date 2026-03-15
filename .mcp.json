@@ -4,8 +4,8 @@
       "command": "npx",
       "args": [
         "chrome-devtools-mcp@latest",
-        "--chromeArg=--no-sandbox",
-        "--chromeArg=--disable-setuid-sandbox"
+        "--autoConnect",
+        "--channel=beta"
       ]
     }
   }
