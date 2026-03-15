@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "chrome-devtools": {
+      "command": "npx",
+      "args": [
+        "chrome-devtools-mcp@latest",
+        "--chromeArg=--no-sandbox",
+        "--chromeArg=--disable-setuid-sandbox"
+      ]
+    }
+  }
+}
