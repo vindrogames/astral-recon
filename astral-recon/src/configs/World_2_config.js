@@ -98,9 +98,15 @@ export default {
                 assetPath: 'avatars/elvis_reveal_animation.png',
                 atlasPath: 'avatars/elvis_reveal_animation.json'
             },
+            {
+                assetKey: 'end_dialogue_animation_world_2',
+                assetPath: 'end_dialogue/end_dialogue_animation_world_2.png',
+                atlasPath: 'end_dialogue/end_dialogue_animation_world_2.json'
+            },
         ]
     },
     uiButtons: [
+        /*
         {
             button: 'hard',
             pos_X: 64 * 1.5 + 32,
@@ -117,6 +123,7 @@ export default {
             imgKeyLight: 'easy_light_world_2',
             onClickAction: 'setEasy'
         },
+        */
         {
             button: 'quit',
             pos_X: 64 * 4.5 + 160,
@@ -158,7 +165,7 @@ export default {
                 repeat: 0,
                 frameRate: 6,
                 closedDoorPlaceholder: 'door_top_closed_placeholder_world_2',
-                openTileIndex: 15
+                openTileIndex: 11
             }
         },
         {
@@ -192,7 +199,7 @@ export default {
                 repeat: 0,
                 frameRate: 6,
                 closedDoorPlaceholder: 'door_right_closed_placeholder_world_2',
-                openTileIndex: 15
+                openTileIndex: 14
             }
         },
         {
@@ -238,6 +245,18 @@ export default {
                 repeat: 0,
                 frameRate: 8,
             },
+            endDialogue: {
+                pos_X: Game_config.tileSize * Game_config.col_5,
+                pos_Y: Game_config.tileSize * Game_config.row_4 + Game_config.centerTile,
+                atlasKey: 'end_dialogue_animation_world_2',
+                animationKey: 'end_dialogue_animation_world_2',
+                prefix: 'end_dialogue_',
+                start: 0,
+                end: 6,
+                zeroPad: 4,
+                repeat: 0,
+                duration: 21000
+            }
         },
     ],
     playerClass: 'PlayerW2',

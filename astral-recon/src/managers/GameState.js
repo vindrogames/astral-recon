@@ -12,11 +12,19 @@ const GameState = {
     keyCollected: false,
     currentDifficulty: 'hard',
 
+    // Track which doors have been opened (by world and room index)
+    openDoors: {
+        world_1: {},
+        world_2: {}
+    },
+
     // helper functions to manage GameState
     setWorld(worldKey) {
         this.currentWorldKey = worldKey;
         this.currentRoomIndex = 0;
         this.keyCollected = false;
+        // Reset door states when entering a new world
+        this.openDoors[worldKey] = {};
     },
 
     setDifficulty(newDifficulty) {
@@ -33,6 +41,13 @@ const GameState = {
     nextRoom() {
         this.currentRoomIndex++;
         this.keyCollected = false;
+    },
+
+    goToPreviousRoom() {
+        if (this.currentRoomIndex > 0) {
+            this.currentRoomIndex--;
+            this.keyCollected = false;
+        }
     },
 
     setKeyCollected(val) {
@@ -62,6 +77,17 @@ const GameState = {
     isWorldComplete(worldKey) {
         return this.completedWorlds[worldKey];
     },
+
+    markDoorOpen(worldKey, roomIndex) {
+        if (!this.openDoors[worldKey]) {
+            this.openDoors[worldKey] = {};
+        }
+        this.openDoors[worldKey][roomIndex] = true;
+    },
+
+    isDoorOpen(worldKey, roomIndex) {
+        return this.openDoors[worldKey]?.[roomIndex] === true;
+    }
 };
 
 export default GameState;

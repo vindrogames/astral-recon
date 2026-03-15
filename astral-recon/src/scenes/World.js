@@ -2,7 +2,7 @@
 import GameState from '../managers/GameState.js';
 import RoomManager from '../managers/RoomManager.js';
 import GameButton from '../gameobjects/GameButton.js';
-import { Wall } from '../gameobjects/Wall.js';
+// import { Wall } from '../gameobjects/Wall.js';
 
 
 export default class World extends Phaser.Scene {
@@ -105,6 +105,7 @@ export default class World extends Phaser.Scene {
 
             // Use action map to access and set corresponding difficulty functions from GameState.js
             const actionMap = {
+                /*
                 setEasy: () => {
                     GameState.setDifficulty('easy');
                     this.updateDifficultyUiButtons();
@@ -113,6 +114,7 @@ export default class World extends Phaser.Scene {
                     GameState.setDifficulty('hard');
                     this.updateDifficultyUiButtons();
                 },
+                */
                 quitWorld: () => this.quitWorld(this)
             };
 
@@ -192,12 +194,32 @@ export default class World extends Phaser.Scene {
     }
 
 
+    /*
     handleDoorTransition(tileX, tileY) {
         if (GameState.keyCollected) {
             this.roomManager.goToNextRoom();
         }
     }
+    */
 
+    handleDoorTransition(tileX, tileY) {
+        // Check if this is an entry door (12 or 13)
+        const tile = this.map?.getTileAt(tileX, tileY);
+        
+        if (tile && (tile.index === 12 || tile.index === 13)) {
+            // Entry door — go back to previous room
+            this.handleBackwardDoorTransition(tileX, tileY);
+            return;
+        }
+
+        // Exit door — go forward to next room (original logic)
+        if (GameState.keyCollected) {
+            this.roomManager.goToNextRoom();
+        }
+    }
+
+    /* OLD FUNCTION TO TRIGGER WALLS AND PLACE STATIC SPRITE ON MAP (INTITAL EASY MODE)
+    
     triggerWallAt(tileX, tileY) {
         if (!this.walls) return;
 
@@ -205,10 +227,43 @@ export default class World extends Phaser.Scene {
             const wallTileX = Math.round((wall.x - 32) / 64);
             const wallTileY = Math.round((wall.y - 32) / 64);
 
-            if (wallTileX === tileX && wallTileY === tileY && !wall.isTriggered) {
+            if (wallTileX === tileX && wallTileY === tileY) {
                 wall.triggerWall();
             }
         });
+    }
+
+    */
+
+    triggerWallAt(tileX, tileY) {
+        const wallAssetKey = this.config.wallAnimationKey;
+        const worldX = tileX * 64 + 32;
+        const worldY = tileY * 64 + 32;
+
+        // Create temporary sprite for animation
+        const tempWall = this.add.sprite(worldX, worldY, wallAssetKey).setDepth(3);
+
+        // Create animation if it doesn't exist
+        if (!this.anims.exists(wallAssetKey)) {
+            this.anims.create({
+                key: wallAssetKey,
+                frames: this.anims.generateFrameNames(wallAssetKey, {
+                    prefix: 'wall_animation_',
+                    start: 0,
+                    end: 11,
+                    zeroPad: 4
+                }),
+                repeat: 0,
+                frameRate: 8,
+            });
+        }
+
+        // Play animation and destroy when done
+        tempWall.play(wallAssetKey);
+        this.time.delayedCall(
+            (12 / 8) * 1000, // duration based on frame count / frameRate
+            () => tempWall.destroy()
+        );
     }
 
     update() {

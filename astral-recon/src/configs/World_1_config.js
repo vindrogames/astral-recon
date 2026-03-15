@@ -107,6 +107,7 @@ export default {
         ]
     },
     uiButtons: [
+        /*
         {
             button: 'hard',
             pos_X: Game_config.tileSize * Game_config.col_3,
@@ -123,6 +124,7 @@ export default {
             imgKeyLight: 'easy_light_world_1',
             onClickAction: 'setEasy'
         },
+        */
         {
             button: 'quit',
             pos_X: Game_config.tileSize * Game_config.col_8,

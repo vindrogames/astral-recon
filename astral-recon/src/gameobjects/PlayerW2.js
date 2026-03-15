@@ -9,9 +9,9 @@ export class PlayerW2 extends Player {
         // Frames 0-3 (row 1): slide/walk cycle used for all directions
         // Frames 4-7 (row 2): secondary animation (e.g. idle or alt walk)
         const animations = [
-            { key: 'walk_down',  start: 0, end: 3, frameRate: 8 },
-            { key: 'walk_up',    start: 0, end: 3, frameRate: 8 },
-            { key: 'walk_left',  start: 0, end: 3, frameRate: 8 },
+            { key: 'walk_down', start: 0, end: 3, frameRate: 8 },
+            { key: 'walk_up', start: 0, end: 3, frameRate: 8 },
+            { key: 'walk_left', start: 0, end: 3, frameRate: 8 },
             { key: 'walk_right', start: 0, end: 3, frameRate: 8 },
             { key: 'idle_front', start: 4, end: 7, frameRate: 6 },
         ];
@@ -39,7 +39,7 @@ export class PlayerW2 extends Player {
         let hitWallTile = null; // death tile that stopped the slide
 
         // Tiles that stop the slide (death tiles block without killing)
-        const STOP_TILES = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 16];
+        const STOP_TILES = [2, 3, 4, 5, 6, 7, 8, 9, 10];
 
         for (let step = 1; step <= 9; step++) {
             const checkX = curTileX + deltaX * step;
@@ -58,7 +58,7 @@ export class PlayerW2 extends Player {
             }
 
             // Open door — slide onto it then transition
-            if (tile.index === 15 || tile.index === 22) {
+            if (tile.index === 11 || tile.index === 14) {
                 destTileX = checkX;
                 destTileY = checkY;
                 hitDoorTile = { tileX: checkX, tileY: checkY };
@@ -114,8 +114,20 @@ export class PlayerW2 extends Player {
                 }
                 if (!this.active || !this.scene) return;
 
+                /*
                 if (hitDoorTile) {
                     this.scene.handleDoorTransition(hitDoorTile.tileX, hitDoorTile.tileY);
+                }
+                */
+
+                if (hitDoorTile) {
+                    const doorTile = this.scene.tilemap.getTileAt(hitDoorTile.tileX, hitDoorTile.tileY);
+                    // Entry doors (12, 13) trigger backward transition; exit doors (11, 14) trigger forward
+                    if (doorTile && (doorTile.index === 12 || doorTile.index === 13)) {
+                        this.scene.handleBackwardDoorTransition(hitDoorTile.tileX, hitDoorTile.tileY);
+                    } else if (doorTile && (doorTile.index === 11 || doorTile.index === 14)) {
+                        this.scene.handleDoorTransition(hitDoorTile.tileX, hitDoorTile.tileY);
+                    }
                 }
             }
         });

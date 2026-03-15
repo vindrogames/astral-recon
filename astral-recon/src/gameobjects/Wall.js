@@ -10,7 +10,6 @@ export class Wall extends GameObjects.Sprite {
         
         this.setVisible(false);
         this.setAlpha(0);
-        this.isTriggered = false;
 
         this.animKey = asset;
 
@@ -20,7 +19,7 @@ export class Wall extends GameObjects.Sprite {
                 frames: scene.anims.generateFrameNames(asset, {
                     prefix: 'wall_animation_',
                     start: 0,
-                    end: 5,
+                    end: 11,
                     zeroPad: 4
                 }),
                 repeat: 0,
@@ -30,11 +29,10 @@ export class Wall extends GameObjects.Sprite {
     }
 
     triggerWall() {
-        if (!this.isTriggered) {
-            this.isTriggered = true;
-            this.setVisible(true);
-            this.setAlpha(1);
-            this.play(this.animKey, true);
-        }
+
+        //this.setVisible(true);
+        //this.setAlpha(1);
+        this.play(this.animKey, true);
+        
     }
 }

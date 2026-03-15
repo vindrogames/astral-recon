@@ -4,7 +4,7 @@ import KeyTile from '../gameobjects/Key_tile.js';
 import Door from '../gameobjects/Door.js';
 import { Player } from '../gameobjects/Player.js';
 import { PlayerW2 } from '../gameobjects/PlayerW2.js';
-import { Wall } from '../gameobjects/Wall.js';
+//import { Wall } from '../gameobjects/Wall.js';
 
 const PLAYER_CLASSES = {
     PlayerW2,
@@ -37,6 +37,9 @@ export default class RoomManager {
         // Load tilemap with RoomManager Method
         this.loadTileMap(this.roomConfig);
 
+        // For World 2: Set entry door tiles based on previous room's state
+        this.setupEntryDoorTiles();
+
         // Handle any room entry animations (closing doors for world 1 and caged astro animations for rooms 3 in all worlds)
         this.handleRoomEntryAnimations(this.roomConfig);
 
@@ -47,8 +50,35 @@ export default class RoomManager {
         this.spawnPlayer(this.roomConfig);
 
         // Create wall sprites for death tiles (index 2)
-        this.createWalls();
+        //this.createWalls();
     }
+
+    setupEntryDoorTiles() {
+        // Only applies to World 2
+        if (this.config.key !== 'world_2') return;
+
+        const roomIndex = GameState.getCurrentRoomIndex();
+
+        // If not the first room, set entry door tile if previous room's exit door is open
+        if (roomIndex > 0) {
+            const prevRoomIndex = roomIndex - 1;
+            if (GameState.isDoorOpen('world_2', prevRoomIndex)) {
+                const roomConfig = this.config.rooms[roomIndex];
+
+                // Find and set entry door tile to passable (open door tile index)
+                if (roomConfig.entryDoorTile) {
+                    const tileX = roomConfig.entryDoorTile.tileX;
+                    const tileY = roomConfig.entryDoorTile.tileY;
+                    const openTileIndex = roomConfig.entryDoorTile.openTileIndex;
+
+                    if (this.scene.map) {
+                        this.scene.map.putTileAt(openTileIndex, tileX, tileY);
+                    }
+                }
+            }
+        }
+    }
+
 
     loadTileMap(roomConfig) {
 
@@ -76,13 +106,16 @@ export default class RoomManager {
         keyTile.playAnimation?.();
     }
 
-    spawnPlayer(roomConfig) {
-        if (!roomConfig.playerStart) return;
+    spawnPlayer(roomConfig, overrideSpawnPos = null) {
+        if (!roomConfig.playerStart && !overrideSpawnPos) return;
 
         // Destroy existing player if it exists
         if (this.scene.player) {
             this.scene.player.destroy();
         }
+
+        // Use override position if provided, otherwise use room config
+        const spawnPos = overrideSpawnPos || roomConfig.playerStart;
 
         // Create new player at the specified start position
         // Use player asset loaded in main Preloader
@@ -90,19 +123,20 @@ export default class RoomManager {
         const playerAsset = this.config.playerAsset ?? 'player_animation';
         this.scene.player = new PlayerClass(
             this.scene,
-            roomConfig.playerStart.x,
-            roomConfig.playerStart.y,
+            spawnPos.x,
+            spawnPos.y,
             playerAsset
         );
 
         // Convert pixel coordinates to tile coordinates and center player properly
-        const tileX = Math.floor(roomConfig.playerStart.x / 64);
-        const tileY = Math.floor(roomConfig.playerStart.y / 64);
+        const tileX = Math.floor(spawnPos.x / 64);
+        const tileY = Math.floor(spawnPos.y / 64);
         this.scene.player.setTilePosition(tileX, tileY);
 
         this.scene.cleanupObjects.push(this.scene.player);
     }
 
+    /*
     createWalls() {
         this.scene.walls = [];
 
@@ -110,6 +144,7 @@ export default class RoomManager {
 
         const wallAssetKey = this.config.wallAnimationKey;
 
+        
         for (let y = 0; y < this.scene.map.height; y++) {
             for (let x = 0; x < this.scene.map.width; x++) {
                 const tile = this.scene.map.getTileAt(x, y);
@@ -121,6 +156,7 @@ export default class RoomManager {
             }
         }
     }
+    */
 
     handleRoomEntryAnimations(roomConfig) {
         // Optional closed door placeholder for exit door (world_2)
@@ -160,7 +196,7 @@ export default class RoomManager {
         this.scene.closedDoorPlaceholder = null;
         this.scene.cagedAstro = null;
         this.scene.player = null;
-        this.scene.walls = [];
+        //this.scene.walls = [];
     }
 
     checkKeyTileCollision(playerX, playerY) {
@@ -225,6 +261,11 @@ export default class RoomManager {
                 const tileX = Math.floor(cfg.pos_X / 64);
                 const tileY = Math.floor(cfg.pos_Y / 64);
                 this.scene.map.putTileAt(cfg.openTileIndex, tileX, tileY);
+
+                // Mark door as open in GameState for World 2 persistence
+                if (this.config.key === 'world_2') {
+                    GameState.markDoorOpen('world_2', GameState.getCurrentRoomIndex());
+                }
             }
 
             if (type === 'entry' && this.scene.staticOpenDoor) {

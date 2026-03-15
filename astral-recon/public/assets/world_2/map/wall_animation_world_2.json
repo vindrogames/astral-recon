@@ -59,6 +59,66 @@
             },
             "rotated": false,
             "trimmed": false
+        },
+        "wall_animation_0006": {
+            "frame": {
+                "x": 0,
+                "y": 64,
+                "w": 64,
+                "h": 64
+            },
+            "rotated": false,
+            "trimmed": false
+        },
+        "wall_animation_0007": {
+            "frame": {
+                "x": 64,
+                "y": 64,
+                "w": 64,
+                "h": 64
+            },
+            "rotated": false,
+            "trimmed": false
+        },
+        "wall_animation_0008": {
+            "frame": {
+                "x": 128,
+                "y": 64,
+                "w": 64,
+                "h": 64
+            },
+            "rotated": false,
+            "trimmed": false
+        },
+        "wall_animation_0009": {
+            "frame": {
+                "x": 192,
+                "y": 64,
+                "w": 64,
+                "h": 64
+            },
+            "rotated": false,
+            "trimmed": false
+        },
+        "wall_animation_0010": {
+            "frame": {
+                "x": 256,
+                "y": 64,
+                "w": 64,
+                "h": 64
+            },
+            "rotated": false,
+            "trimmed": false
+        },
+        "wall_animation_0011": {
+            "frame": {
+                "x": 320,
+                "y": 64,
+                "w": 64,
+                "h": 64
+            },
+            "rotated": false,
+            "trimmed": false
         }
     },
     "meta": {
