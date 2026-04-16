@@ -308,6 +308,8 @@ export default class RoomManager {
     }
 
     endWorldSequence() {
+        this.scene.stopTimer?.();
+        this.scene.highlightTimer?.();
         GameState.markWorldComplete(GameState.currentWorldKey);
         console.log(GameState.completedWorlds);
 
@@ -367,19 +369,23 @@ export default class RoomManager {
                 this.endDialogue.play(endDialogueCnfg.animationKey);
 
                 this.endDialogue.on('animationcomplete', () => {
-                    this.scene.cameras.main.fadeOut(1000, 0, 0, 0);
                     this.endDialogue.destroy();
                     this.astroRevealed.destroy();
-                    this.scene.cameras.main.once('camerafadeoutcomplete', () => {
-                        this.scene.quitWorld();
+                    this.scene.showMissionCompleteCard(() => {
+                        this.scene.cameras.main.fadeOut(1000, 0, 0, 0);
+                        this.scene.cameras.main.once('camerafadeoutcomplete', () => {
+                            this.scene.quitWorld();
+                        });
                     });
                 });
             } else {
-                // No end dialogue — fade out and return to start screen
-                this.scene.cameras.main.fadeOut(1000, 0, 0, 0);
+                // No end dialogue — show card then fade out
                 this.astroRevealed.destroy();
-                this.scene.cameras.main.once('camerafadeoutcomplete', () => {
-                    this.scene.quitWorld();
+                this.scene.showMissionCompleteCard(() => {
+                    this.scene.cameras.main.fadeOut(1000, 0, 0, 0);
+                    this.scene.cameras.main.once('camerafadeoutcomplete', () => {
+                        this.scene.quitWorld();
+                    });
                 });
             }
         });

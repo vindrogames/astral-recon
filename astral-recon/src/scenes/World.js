@@ -95,6 +95,77 @@ export default class World extends Phaser.Scene {
         this.time.delayedCall(0, () => {
             this.roomManager.loadCurrentRoom();
         });
+
+        // Timer — starts now, sits in the bottom-left next to the quit button row
+        this.timerRunning = true;
+        this.timerStartTime = this.time.now;
+        const quitBtn = this.config.uiButtons.find(b => b.button === 'quit');
+        const timerY = quitBtn ? quitBtn.pos_Y : 548;
+        this.timerText = this.add.text(8, timerY, '00:00', {
+            fontFamily: 'monospace',
+            fontSize: '14px',
+            color: '#ffffff',
+            stroke: '#000000',
+            strokeThickness: 3
+        }).setDepth(42).setOrigin(0, 0.5);
+    }
+
+    stopTimer() {
+        if (!this.timerRunning) return;
+        this.timerRunning = false;
+        this.timerFinalMs = this.time.now - this.timerStartTime;
+        if (this.timerText) this.timerText.setText(this._formatTime(this.timerFinalMs));
+    }
+
+    // Called when end sequence starts — makes the frozen time prominent on the end-level screen
+    highlightTimer() {
+        if (!this.timerText) return;
+        this.timerText.setText('Time  ' + this._formatTime(this.timerFinalMs ?? 0));
+        this.timerText.setFontSize('18px');
+        this.timerText.setColor('#FFD700');
+        this.timerText.setDepth(90);
+    }
+
+    showMissionCompleteCard(onDone) {
+        const elapsed = this.timerFinalMs ?? 0;
+        const [gold, silver] = this.config.starThresholds ?? [60_000, 150_000];
+        const stars = elapsed <= gold ? 3 : elapsed <= silver ? 2 : 1;
+
+        const cx = 288, cy = 252;
+        const objs = [];
+
+        const add = (fn, ...args) => { const o = fn.call(this.add, ...args); objs.push(o); return o; };
+
+        add(this.add.rectangle, cx, cy, 300, 170, 0x000000, 0.88).setDepth(100).setOrigin(0.5);
+        add(this.add.rectangle, cx, cy, 300, 170).setDepth(100).setOrigin(0.5).setStrokeStyle(2, 0xffd700, 1).setFillStyle();
+
+        add(this.add.text, cx, cy - 58, 'MISSION COMPLETE', {
+            fontFamily: 'monospace', fontSize: '15px', color: '#FFD700',
+            stroke: '#000000', strokeThickness: 3
+        }).setDepth(101).setOrigin(0.5);
+
+        add(this.add.text, cx, cy - 12, '★'.repeat(stars) + '☆'.repeat(3 - stars), {
+            fontFamily: 'monospace', fontSize: '30px', color: '#FFD700',
+            stroke: '#000000', strokeThickness: 3
+        }).setDepth(101).setOrigin(0.5);
+
+        add(this.add.text, cx, cy + 42, this._formatTime(elapsed), {
+            fontFamily: 'monospace', fontSize: '22px', color: '#ffffff',
+            stroke: '#000000', strokeThickness: 3
+        }).setDepth(101).setOrigin(0.5);
+
+        objs.forEach(o => o.setAlpha(0));
+        this.tweens.add({
+            targets: objs, alpha: 1, duration: 500, ease: 'Power2',
+            onComplete: () => this.time.delayedCall(2500, onDone)
+        });
+    }
+
+    _formatTime(ms) {
+        const totalSecs = Math.floor(ms / 1000);
+        const mins = Math.floor(totalSecs / 60).toString().padStart(2, '0');
+        const secs = (totalSecs % 60).toString().padStart(2, '0');
+        return `${mins}:${secs}`;
     }
 
     // Function to create the UI buttons (again, only once)
@@ -159,6 +230,8 @@ export default class World extends Phaser.Scene {
 
         // Optional: clean UI references
         this.buttons = {};
+        this.timerRunning = false;
+        if (this.timerText) { this.timerText.destroy(); this.timerText = null; }
 
         this.scene.cleanupObjects = [];
         this.layer = null;
@@ -267,9 +340,11 @@ export default class World extends Phaser.Scene {
     }
 
     update() {
-        // Update player if it exists
         if (this.player) {
             this.player.update();
+        }
+        if (this.timerRunning && this.timerText) {
+            this.timerText.setText(this._formatTime(this.time.now - this.timerStartTime));
         }
     }
 }

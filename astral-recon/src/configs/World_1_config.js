@@ -4,6 +4,8 @@ export default {
     key: 'world_1',
     tilesetImage: 'world_1_tileset_64',
     wallAnimationKey: 'wall_animation_world_1',
+    // [3-star threshold ms, 2-star threshold ms] — below gold → ★★★, below silver → ★★, else → ★
+    starThresholds: [60_000, 150_000],
     assets: {
         tilemaps: [
             {

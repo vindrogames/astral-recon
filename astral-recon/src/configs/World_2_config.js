@@ -4,6 +4,7 @@ export default {
     key: 'world_2',
     tilesetImage: 'world_2_tileset_64',
     wallAnimationKey: 'wall_animation_world_2',
+    starThresholds: [90_000, 240_000],
     assets: {
         tilemaps: [
             {
