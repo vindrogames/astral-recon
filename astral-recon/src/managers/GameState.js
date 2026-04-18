@@ -6,6 +6,12 @@ const GameState = {
         world_2: false,
     },
 
+    // Stores final completion time (ms) per world
+    worldTimes: {
+        world_1: null,
+        world_2: null,
+    },
+
     // Tracks global World settings and room settings
     currentWorldKey: null,
     currentRoomIndex: 0,
@@ -72,6 +78,14 @@ const GameState = {
 
     markWorldComplete(worldKey) {
         this.completedWorlds[worldKey] = true;
+    },
+
+    setWorldTime(worldKey, ms) {
+        this.worldTimes[worldKey] = ms;
+    },
+
+    getWorldTime(worldKey) {
+        return this.worldTimes[worldKey];
     },
 
     isWorldComplete(worldKey) {

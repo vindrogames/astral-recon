@@ -311,6 +311,7 @@ export default class RoomManager {
         this.scene.stopTimer?.();
         this.scene.highlightTimer?.();
         GameState.markWorldComplete(GameState.currentWorldKey);
+        GameState.setWorldTime(GameState.currentWorldKey, this.scene.timerFinalMs ?? 0);
         console.log(GameState.completedWorlds);
 
         const astroRevealCnfg = this.roomConfig.astroReveal;

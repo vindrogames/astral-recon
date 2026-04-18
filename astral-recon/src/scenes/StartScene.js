@@ -70,6 +70,21 @@ export default class StartScene_2 extends Phaser.Scene {
                 if (asset) {
                     this.add.image(asset.pos_X, asset.pos_Y, asset.imgKey).setDepth(84);
 
+                    const ms = GameState.getWorldTime(worldKey);
+                    if (ms !== null && ms !== undefined) {
+                        const totalSecs = Math.floor(ms / 1000);
+                        const mins = Math.floor(totalSecs / 60).toString().padStart(2, '0');
+                        const secs = (totalSecs % 60).toString().padStart(2, '0');
+                        this.add.text(asset.pos_X, asset.pos_Y + 105, `Time:\n${mins}:${secs}`, {
+                            fontFamily: 'monospace',
+                            fontSize: '18px',
+                            color: '#FFD700',
+                            stroke: '#000000',
+                            strokeThickness: 3,
+                            align: 'center'
+                        }).setDepth(85).setOrigin(0.5, 0);
+                    }
+
                     // Optional: disable or remove mission button for completed world
                     console.log(this.buttons);
                     const button = this.buttons[`${worldKey}_btn`];
